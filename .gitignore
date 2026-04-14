@@ -1,0 +1,75 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build output
+dist/
+build/
+out/
+tmp/
+temp/
+.tmp/
+.cache/
+.angular/
+coverage/
+storybook-static/
+
+# Angular / tooling
+/.sass-cache
+/connect.lock
+/libpeerconnection.log
+testem.log
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# Runtime / process files
+*.pid
+*.pid.lock
+*.seed
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editors / IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.swp
+*.swo
+*~
+
+# Testing
+.nyc_output/
+junit.xml
+
+# Firebase / Google Cloud local artifacts
+.firebase/
+.gcloud/
+
+# Archives
+*.tgz
+*.zip
+
+# Misc
+*.local
+*.orig
