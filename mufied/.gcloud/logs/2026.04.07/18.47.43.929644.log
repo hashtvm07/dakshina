@@ -1,9 +1,0 @@
-2026-04-07 18:47:43,944 DEBUG    root            Loaded Command Group: ['gcloud', 'config']
-2026-04-07 18:47:43,958 DEBUG    root            Loaded Command Group: ['gcloud', 'config', 'get_value']
-2026-04-07 18:47:43,960 DEBUG    root            Running [gcloud.config.get-value] with arguments: [SECTION/PROPERTY: "project"]
-2026-04-07 18:47:43,960 DEBUG    root            Chosen display Format:value(.)
-2026-04-07 18:47:43,961 INFO     root            Display format: "value(.)"
-2026-04-07 18:47:43,961 INFO     ___FILE_ONLY___ mufiedapi
-
-2026-04-07 18:47:44,396 DEBUG    root            Failed to check metadata server: <urlopen error [Errno 11001] getaddrinfo failed>
-2026-04-07 18:47:44,396 DEBUG    root            On GCE from server: False
