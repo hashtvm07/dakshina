@@ -1,0 +1,43 @@
+<div class="dashboard-shell">
+  <header class="dashboard-topbar">
+    <div class="title-block">
+      <p class="eyebrow">MUFIED Admin</p>
+      <h1>Content and user administration</h1>
+    </div>
+
+    <div class="topbar-actions">
+      <div class="session-card">
+        <span>{{ auth.currentUser()?.username }}</span>
+      </div>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        [class.open]="mobileMenuOpen()"
+        [attr.aria-expanded]="mobileMenuOpen()"
+        aria-label="Toggle admin menu"
+        (click)="toggleMobileMenu()"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="dashboard-nav" [class.open]="mobileMenuOpen()">
+    <button type="button" class="nav-pill" [class.active]="activePanel() === 'content'" (click)="showPanel('content')">
+      Website Content
+    </button>
+    <button type="button" class="nav-pill" [class.active]="activePanel() === 'users'" (click)="showPanel('users')">
+      User Management
+    </button>
+    <button type="button" class="nav-pill nav-pill-warn" (click)="logout()">Logout</button>
+  </nav>
+
+  @if (activePanel() === 'content') {
+    <app-home-content-editor />
+  } @else {
+    <app-user-management />
+  }
+</div>

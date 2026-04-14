@@ -1,0 +1,46 @@
+gcloud auth loogin
+gcloud config set project mufiedapi
+gcloud run deploy nest-api --source . --region asia-south1 --allow-unauthenticated
+gcloud run deploy agent-console --source . --region asia-south1 --allow-unauthenticated
+gcloud run deploy chat-demo --source . --region asia-south1 --allow-unauthenticated
+
+gcloud run deploy agent-console --source . --region asia-south1 --verbosity=debug
+
+gcloud config get-value project
+
+gcloud config set project coolpexwebchat
+gcloud run deploy chatbot --source . --region asia-south1 --platform managed --allow-unauthenticated --port 8080 --min-instances 0
+gcloud run deploy chat-widget --source . --region asia-south1 --platform managed --allow-unauthenticated --port 8080 --min-instances 0
+gcloud run deploy chatdemo --source . --region asia-south1 --platform managed --allow-unauthenticated --port 8080 --min-instances 0
+
+api url:
+https://nest-api-560137381308.asia-south1.run.app
+
+
+=========================================================================
+SETTING DATABASE URL IN CLOUDRUN SERVER:
+gcloud auth login]\
+gcloud config set project mufiedapi
+gcloud run services update nest-api --region asia-south1 --update-env-vars "FIREBASE_PROJECT_ID=...,FIREBASE_CLIENT_EMAIL=...,FIREBASE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCoZDU35O77QmjV\nBxep7c7MDJLHNtHTzZXkyiHiZea+AUr8cNqU0/MEPTM2YmBkfQRsbSs8U16a3Hu+\nBFP7AaanNT2TBjO2hDhIooXftfUiFsly2D1P2o8JtAX1/WPPNdefocAT7iUBglz4\njL/vdEv4Yed5KjRdYJnBb6b2Jb8JNUM6geEA1QLJb+uuBsLEGYyXDrfZ8rnacLeV\ntN7xfprT75H5TsldUXkOXhpEDRLn4sWTSjgVWa2zNGxPj1fefBdnBn/ucGMdZiU5\nCQI6BG+zlRfkq0hhJev2BjFdBwyX722tST23l6Ib5bjaQwUJvG9O9iQYqabiEZUV\nMXRuq7IhAgMBAAECggEAASHZbO2l3HjFmR/8Jv01w/Vlrx2R5rYXVl7cC2WfP4Wr\n4DIrk952nc8PQnAK1G5HlxffcNwE2iuS76Gxitzlh9yP0Pp2+RnZdK/8KxLxD/B6\nP90xP2D/nxN1zLs+2D89++DTi0gkMLrJbJ/JPGMchQlDw1hIKg+Z+im12kSrvTrk\nlkBJvWAwGTVUj3yiaEsZadNQanKJ7g0VFn0ioOVHanbqHzJ32vwaSAvHS8iyFvv8\n+M6MPwVxHQHcnpy6GHoWxqlHNWTU69rHY3hI+NErXexLLTDvxNDZVDv13UdkD/aZ\nNWjTQUs7hqTuE7x5obD+seW5YhatPWkpkM5NPXo+0QKBgQDaItzU7tixYQlLJO4B\nzNv4A8txr6mvvYQIA2/jCRROD2MBEmkVCWtU5AHc3UzaKVULakWmWn6Vae4ypnNG\nnF4jB/41BzEQKzVDuTITHAoY5YCCxj2feRCoeH/TXBR9vr18ejitJpxAr/qkijzv\njwigyka727mKVLTB1zfG0a0hjQKBgQDFnuENBt6N23DgxFdB9ZV+pJbZ7Qf5UsQJ\n3kPGJEmBYgQKvK+QqqAm7Hvp1ooBhPQzYMSS0lXWk/OGpuew4cWaWTD+sED2wbmv\nLCvv8HDybT0H91GOkSRiaa83j9V47VMoL2EIA2MI/Oll8KrCvzs+r0/jRLxqjKXr\nMyeL91Ir5QKBgG1PNQw7GDli3+5Y9i/OwZf6BtPUbBrVxDjjyAikPxmS2lDqMeBJ\n1RA4JbrQ5rcYKTbMLVTcWjxzVdrp0DBdIUs6sSdPkEWC8XEbd71duq2ZLBncT3r/\nhtp1b9Cxfs84aunasVYLWBeOV/JmF30QVwmD84gl5kcshVvxhlDKN5DtAoGACr5v\nh9DGyrmScnXaNJjQbtkt5l0voMtyIwM1dhFE+cbFZ3wIo3nTSSp0NitWx2xeBmkN\nZtoOlqLmi3yJfiFYJ+MPedlFPuUbXj2tidbtnRB5T/SPN4wGiV8rin7EYVWtvrKM\nuO3ONY/idItYDUxuQSMw2a9D+xr4bkgSr1Zb3k0CgYBqT6dANaUvs2iz0WYCyzCv\nUbGMlS7PzCXPg5/ZLVtj6LpxZvKxgSWm40Zs5HO6hF/XtXsgx4UBUdDeDR99+ZNY\nzddu3cHPMOiRlWYe18y/NFIqwQuG5m+l6J2e1r+CIayLlmHn2uQ/s2tZn1VLG9lD\nFf3tzggphoUYwEP8ix703Q==\n-----END PRIVATE KEY-----\n"
+=============================================================================
+
+
+======================================================================
+Logs:
+gcloud beta run services logs tail coolpexwebchat --region asia-south
+
+gcloud run services logs read chatbot --region asia-south1 --limit 100
+
+gcloud run services logs read chatbot --region asia-south1 --limit 100 --log-filter="severity>=ERROR"
+
+gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=qa-chatbot AND severity>=ERROR" --project coolpexwebchat --limit 50 --format json
+
+========================================================================y
+
+
+gcloud config get-value project
+gcloud config set project coolpexwebchat
+gcloud run deploy zatca-test --source . --region asia-south1 --allow-unauthenticated
+gcloud run deploy zatca-test --source . --region asia-south1 --platform managed --allow-unauthenticated --port 8080 --min-instances 0
+
+=========================================================================

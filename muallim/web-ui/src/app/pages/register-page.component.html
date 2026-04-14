@@ -1,0 +1,27 @@
+<section class="page-card" *ngIf="siteFacade.sitePayload$ | async as site">
+  <div class="page-intro">
+    <span>Registration</span>
+    <h1>Register Muallim</h1>
+    <p *ngIf="site.settings.registerEnabled; else disabledMessage">
+      Submit the required details to create a new Muallim profile and user account automatically.
+    </p>
+  </div>
+
+  <ng-template #disabledMessage>
+    <p>Registration is currently disabled from admin settings.</p>
+  </ng-template>
+
+  <form *ngIf="site.settings.registerEnabled" [formGroup]="form" (ngSubmit)="submit()" class="data-form">
+    <label><span>Name *</span><input formControlName="name" /></label>
+    <label><span>Username *</span><input formControlName="username" /></label>
+    <label><span>Email *</span><input formControlName="email" /></label>
+    <label><span>Phone *</span><input formControlName="phone" /></label>
+    <label class="full"><span>Address *</span><textarea rows="3" formControlName="address"></textarea></label>
+    <label class="full"><span>Bio</span><textarea rows="4" formControlName="bio"></textarea></label>
+    <button type="submit">Submit Registration</button>
+  </form>
+
+  <div class="success-card" *ngIf="submittedId">
+    Registered successfully. Muallim ID: <strong>{{ submittedId }}</strong>
+  </div>
+</section>

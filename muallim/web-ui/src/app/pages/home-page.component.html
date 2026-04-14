@@ -1,0 +1,60 @@
+<section class="hero" *ngIf="siteFacade.sitePayload$ | async as site">
+  <div class="hero-copy">
+    <span class="eyebrow">Modern Muallim Platform</span>
+    <h1>{{ site.settings.heroTitle }}</h1>
+    <p>{{ site.settings.heroSubtitle }}</p>
+    <div class="hero-actions">
+      <a class="primary-btn" routerLink="/vacancies">View Vacancies</a>
+      <a class="secondary-btn" *ngIf="site.settings.registerEnabled" routerLink="/register">Register Muallim</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img [src]="site.settings.heroImageUrl" alt="Muallim portal hero" />
+  </div>
+</section>
+
+<section class="showcase" *ngIf="siteFacade.sitePayload$ | async as site">
+  <article class="about-card">
+    <span>About</span>
+    <h2>{{ site.settings.aboutTitle }}</h2>
+    <p>{{ site.settings.aboutBody }}</p>
+  </article>
+  <article class="banner-card">
+    <img [src]="site.settings.bannerImageUrl" alt="Portal banner" />
+  </article>
+</section>
+
+<section class="blocks" *ngIf="siteFacade.sitePayload$ | async as site">
+  <article class="block-card" *ngFor="let block of site.blocks">
+    <img *ngIf="block.imageUrl" [src]="block.imageUrl" [alt]="block.title" />
+    <h3>{{ block.title }}</h3>
+    <p>{{ block.body }}</p>
+  </article>
+</section>
+
+<section class="gallery" *ngIf="siteFacade.sitePayload$ | async as site">
+  <div class="section-heading">
+    <span>Gallery</span>
+    <h2>Banner and image assets controlled from admin</h2>
+  </div>
+  <div class="gallery-grid">
+    <figure *ngFor="let item of site.media">
+      <img [src]="item.imageUrl" [alt]="item.title" />
+      <figcaption>{{ item.title }}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="highlight-vacancies">
+  <div class="section-heading">
+    <span>Open Positions</span>
+    <h2>Latest vacancies across colleges</h2>
+  </div>
+  <div class="vacancy-grid">
+    <article class="vacancy-card" *ngFor="let vacancy of (vacancies$ | async)?.slice(0, 3)">
+      <h3>{{ vacancy.title }}</h3>
+      <p>{{ vacancy.college?.name }} • {{ vacancy.location }}</p>
+      <small>Last date: {{ vacancy.lastDate | date }}</small>
+    </article>
+  </div>
+</section>

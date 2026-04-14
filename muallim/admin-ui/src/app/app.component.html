@@ -1,0 +1,21 @@
+<div class="admin-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">M</span>
+      <div>
+        <strong>Muallim Admin</strong>
+        <small>Content and operations</small>
+      </div>
+    </div>
+
+    <nav>
+      <a *ngFor="let item of navItems" [routerLink]="item.path" routerLinkActive="active">
+        {{ item.label }}
+      </a>
+    </nav>
+  </aside>
+
+  <main class="workspace">
+    <router-outlet />
+  </main>
+</div>

@@ -1,0 +1,87 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.login-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background:
+    radial-gradient(circle at top left, rgba(255, 184, 72, 0.16), transparent 24%),
+    radial-gradient(circle at 80% 15%, rgba(42, 210, 185, 0.18), transparent 22%),
+    linear-gradient(180deg, #07141c 0%, #0a1e2a 48%, #071018 100%);
+}
+
+.login-card {
+  width: min(100%, 28rem);
+  display: grid;
+  gap: 1rem;
+  padding: 2rem;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(15, 28, 39, 0.9), rgba(7, 15, 22, 0.94));
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.32);
+}
+
+.eyebrow,
+.copy,
+.field span {
+  color: #c6d3de;
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #7be2d5;
+}
+
+h1,
+.copy,
+.error {
+  margin: 0;
+  color: #eff3f7;
+}
+
+.field {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.field input {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #eff3f7;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: rgba(244, 191, 95, 0.5);
+  box-shadow: 0 0 0 3px rgba(244, 191, 95, 0.14);
+}
+
+button {
+  border: 0;
+  border-radius: 16px;
+  padding: 0.95rem 1rem;
+  background: linear-gradient(135deg, #f5c26b, #ff8d57);
+  color: #1e1207;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ffb8b8;
+}

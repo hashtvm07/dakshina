@@ -1,0 +1,12 @@
+{
+  "apiBaseUrl": "http://localhost:3000",
+  "endpoints": {
+    "siteSettings": "/api/site/settings",
+    "contentBlocks": "/api/site/content-blocks",
+    "mediaAssets": "/api/site/media-assets",
+    "users": "/api/users",
+    "userMeta": "/api/users/meta",
+    "colleges": "/api/colleges",
+    "vacancies": "/api/vacancies"
+  }
+}

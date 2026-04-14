@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUFIED Platform Overview</title>
+  <style>
+    :root {
+      --bg: #f4efe4;
+      --paper: rgba(255, 252, 246, 0.92);
+      --ink: #173229;
+      --muted: #54685f;
+      --line: rgba(23, 50, 41, 0.12);
+      --brand: #0f6a43;
+      --brand-deep: #0a4b31;
+      --accent: #d7b56d;
+      --shadow: 0 20px 50px rgba(18, 37, 31, 0.12);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --max: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(215, 181, 109, 0.28), transparent 34%),
+        radial-gradient(circle at top right, rgba(15, 106, 67, 0.14), transparent 28%),
+        linear-gradient(180deg, #fcf8f0, var(--bg));
+    }
+
+    .page {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 42px;
+      border-radius: calc(var(--radius) + 8px);
+      color: #f8fbf8;
+      background:
+        linear-gradient(135deg, rgba(9, 55, 36, 0.96), rgba(15, 106, 67, 0.92)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -90px auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(215, 181, 109, 0.4), transparent 70%);
+    }
+
+    .hero-grid,
+    .summary-grid,
+    .feature-grid,
+    .system-grid,
+    .closing-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1.35fr 0.85fr;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #d8e9de;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 14px;
+      font-size: clamp(2.3rem, 5vw, 4.3rem);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+    }
+
+    .hero p,
+    .hero li {
+      color: rgba(248, 251, 248, 0.9);
+    }
+
+    .hero-card,
+    .card,
+    .feature,
+    .system,
+    .closing {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(6px);
+    }
+
+    .hero-card h3 {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    .hero-list,
+    .feature ul,
+    .system ul,
+    .closing ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    section.block {
+      margin-top: 26px;
+    }
+
+    .section-head {
+      margin-bottom: 14px;
+    }
+
+    .section-head h2 {
+      margin-bottom: 8px;
+      font-size: clamp(1.55rem, 3vw, 2.2rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .summary-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card,
+    .feature,
+    .system,
+    .closing {
+      padding: 24px;
+    }
+
+    .metric {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--brand-deep);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--brand);
+    }
+
+    .feature-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .feature h3,
+    .system h3,
+    .closing h3 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .feature p,
+    .feature li,
+    .system p,
+    .system li,
+    .closing p,
+    .closing li,
+    .card p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .system-grid,
+    .closing-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .band {
+      margin-top: 28px;
+      padding: 22px 24px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(215, 181, 109, 0.2), rgba(255, 255, 255, 0.65));
+      border: 1px solid rgba(23, 50, 41, 0.1);
+    }
+
+    .band strong {
+      color: var(--brand-deep);
+    }
+
+    @media (max-width: 920px) {
+      .hero-grid,
+      .summary-grid,
+      .feature-grid,
+      .system-grid,
+      .closing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Client Feature Overview</p>
+          <h1>MUFIED Website, Admission Portal, and Content Console</h1>
+          <p>
+            This document gives a high-level summary of the digital platform prepared for MUFIED. It covers the public
+            website, the student admission journey, the hall ticket access flow, the admin editing portal, and the
+            supporting service layer that keeps the experience connected.
+          </p>
+        </div>
+        <aside class="hero-card">
+          <h3>What is included</h3>
+          <ul class="hero-list">
+            <li>Public-facing website with editable home-page content</li>
+            <li>Online admission form with guided data collection</li>
+            <li>Application confirmation and hall ticket retrieval</li>
+            <li>Admin console for updating website content and reviewing admissions</li>
+            <li>Central service layer to connect all modules</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="section-head">
+        <h2>Project Summary</h2>
+        <p>The platform is designed as one connected ecosystem so that visitors, applicants, and administrators all work from the same live content and data source.</p>
+      </div>
+      <div class="summary-grid">
+        <article class="card">
+          <span class="label">Public Website</span>
+          <span class="metric">4</span>
+          <p>Main visitor journeys: home page, institutions page, admission page, and hall ticket page.</p>
+        </article>
+        <article class="card">
+          <span class="label">Admission Journey</span>
+          <span class="metric">End-to-End</span>
+          <p>From enquiry to submission, confirmation, and hall ticket access in one connected flow.</p>
+        </article>
+        <article class="card">
+          <span class="label">Admin Editing</span>
+          <span class="metric">Live</span>
+          <p>Content managers can update major home-page sections from a dedicated editing console.</p>
+        </article>
+        <article class="card">
+          <span class="label">Shared Data</span>
+          <span class="metric">Central</span>
+          <p>Website content and admission records are maintained through one service layer for consistency.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="section-head">
+        <h2>Public Website Features</h2>
+        <p>The public website presents MUFIED in a structured and mobile-friendly format, with content arranged for visitors, applicants, and families.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature">
+          <h3>Home Page Experience</h3>
+          <ul>
+            <li>Hero banner with key messages and action buttons</li>
+            <li>Introduction section with descriptive highlights</li>
+            <li>Programme showcase with linked action cards</li>
+            <li>Admission process overview and campus details</li>
+            <li>Publications and downloadable resource links</li>
+            <li>Footer area with contact and quick-link information</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Institution Information</h3>
+          <ul>
+            <li>Dedicated page listing educational institutions</li>
+            <li>Separate presentation for Qur'an colleges</li>
+            <li>Clear content grouping for easy visitor understanding</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Admission Form</h3>
+          <ul>
+            <li>Online application form with guided entry and resume flow</li>
+            <li>Photo upload for applicant records</li>
+            <li>Personal, family, address, and education details</li>
+            <li>Selection of admission category</li>
+            <li>Built-in declaration before submission</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Applicant Convenience</h3>
+          <ul>
+            <li>Submission confirmation page with important reference details</li>
+            <li>Quick link to hall ticket after successful application</li>
+            <li>WhatsApp share option for applicant reference</li>
+            <li>Direct hall ticket lookup using application number and date of birth</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="section-head">
+        <h2>Admin Portal Features</h2>
+        <p>The admin portal is built for simple content management. It allows the team to update home-page information without editing source files.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature">
+          <h3>Content Editing Console</h3>
+          <ul>
+            <li>Edit hero banner text, actions, and highlight cards</li>
+            <li>Update introductory sections and supporting descriptions</li>
+            <li>Manage programme cards and destination links</li>
+            <li>Edit admission process and campus information</li>
+            <li>Manage publication cards and footer content</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Editor Assistance</h3>
+          <ul>
+            <li>Section-based editing layout for quick navigation</li>
+            <li>Live status display for load and save actions</li>
+            <li>Change awareness through unsaved-change indication</li>
+            <li>Compact mobile-style preview for headline content</li>
+            <li>Summary counters for quick review before publishing</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Admissions Review</h3>
+          <ul>
+            <li>Admin-facing access to submitted admission entries</li>
+            <li>List-based review of applicant details and exam information</li>
+            <li>Central visibility into recent submissions</li>
+          </ul>
+        </article>
+        <article class="feature">
+          <h3>Publishing Model</h3>
+          <ul>
+            <li>Edits are loaded from the live content source</li>
+            <li>Changes remain local inside the editor until saved</li>
+            <li>Published updates are intended to reflect on the website through the shared content layer</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="band">
+      <strong>Operational Note:</strong>
+      The website and admin portal are connected so that core home-page content can be managed from one place instead of being manually repeated across multiple screens.
+    </section>
+
+    <section class="block">
+      <div class="section-head">
+        <h2>Supporting Service Features</h2>
+        <p>Behind the scenes, the service layer enables the public website and the admin portal to work as one coordinated platform.</p>
+      </div>
+      <div class="system-grid">
+        <article class="system">
+          <h3>Content Delivery</h3>
+          <ul>
+            <li>Supplies live home-page content to the public website</li>
+            <li>Provides a separate admin-facing content snapshot for editing</li>
+            <li>Supports content updates from the admin portal</li>
+          </ul>
+        </article>
+        <article class="system">
+          <h3>Admissions Management</h3>
+          <ul>
+            <li>Accepts online admission submissions</li>
+            <li>Assigns application and hall ticket numbers</li>
+            <li>Prevents duplicate applications for the same applicant email</li>
+            <li>Allows applicant lookup using email and date of birth</li>
+          </ul>
+        </article>
+        <article class="system">
+          <h3>Communication and Access</h3>
+          <ul>
+            <li>Sends admission confirmation email after submission</li>
+            <li>Prepares applicant share text for WhatsApp</li>
+            <li>Generates hall ticket details for later retrieval</li>
+            <li>Supports website and admin access from approved domains</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="section-head">
+        <h2>Client-Level Outcome</h2>
+        <p>The completed solution gives MUFIED a modern digital admission and content management workflow with a clear public presentation layer and a separate internal editing interface.</p>
+      </div>
+      <div class="closing-grid">
+        <article class="closing">
+          <h3>For Visitors</h3>
+          <ul>
+            <li>Clear access to institutional information</li>
+            <li>Simple discovery of programmes, publications, and contact details</li>
+            <li>Accessible admission and hall ticket services</li>
+          </ul>
+        </article>
+        <article class="closing">
+          <h3>For Applicants</h3>
+          <ul>
+            <li>Smoother digital application process</li>
+            <li>Instant submission reference details</li>
+            <li>Reusable access to hall ticket information</li>
+          </ul>
+        </article>
+        <article class="closing">
+          <h3>For Management</h3>
+          <ul>
+            <li>Centralized home-page content control</li>
+            <li>Visibility into admission entries</li>
+            <li>Reduced dependency on repeated manual website edits</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

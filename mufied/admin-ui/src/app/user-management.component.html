@@ -1,0 +1,72 @@
+<section class="users-shell">
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <p class="eyebrow">User Management</p>
+        <h2>Create mentor, student, and admin users</h2>
+      </div>
+      <button type="button" (click)="loadUsers()" [disabled]="loading()">
+        {{ loading() ? 'Refreshing...' : 'Refresh' }}
+      </button>
+    </div>
+
+    <p class="message">{{ message() }}</p>
+
+    <div class="form-grid">
+      <label class="field">
+        <span>Username</span>
+        <input [ngModel]="username()" (ngModelChange)="username.set($event)" />
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input type="password" [ngModel]="password()" (ngModelChange)="password.set($event)" />
+      </label>
+
+      <label class="field">
+        <span>Privilege</span>
+        <select [ngModel]="role()" (ngModelChange)="role.set($event)">
+          @for (item of roles; track item) {
+            <option [value]="item">{{ item }}</option>
+          }
+        </select>
+      </label>
+
+      <button class="submit-btn" type="button" (click)="createUser()" [disabled]="saving()">
+        {{ saving() ? 'Creating...' : 'Create User' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <div>
+        <p class="eyebrow">Existing Users</p>
+        <h2>{{ users().length }} stored users</h2>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Privilege</th>
+            <th>Created By</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (user of users(); track user.username) {
+            <tr>
+              <td data-label="Username">{{ user.username }}</td>
+              <td data-label="Privilege"><span class="badge">{{ user.role }}</span></td>
+              <td data-label="Created By">{{ user.createdBy }}</td>
+              <td data-label="Created At">{{ formatDate(user.createdAt) }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>

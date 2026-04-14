@@ -1,0 +1,122 @@
+2026-04-08 18:31:06,445 DEBUG    root            Loaded Command Group: ['gcloud', 'run']
+2026-04-08 18:31:07,585 DEBUG    root            Loaded Command Group: ['gcloud', 'run', 'deploy']
+2026-04-08 18:31:07,615 DEBUG    root            Running [gcloud.run.deploy] with arguments: [--allow-unauthenticated: "True", --region: "asia-south1", --source: ".", SERVICE: "nest-api"]
+2026-04-08 18:31:07,890 DEBUG    root            Failed to check metadata server: <urlopen error [Errno 11001] getaddrinfo failed>
+2026-04-08 18:31:07,890 DEBUG    root            On GCE from server: False
+2026-04-08 18:31:08,249 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:08,287 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:08,292 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:08,293 DEBUG    google.auth.transport.requests Making request: POST https://oauth2.googleapis.com/token
+2026-04-08 18:31:08,298 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): oauth2.googleapis.com:443
+2026-04-08 18:31:08,579 DEBUG    urllib3.connectionpool https://oauth2.googleapis.com:443 "POST /token HTTP/1.1" 200 None
+2026-04-08 18:31:08,617 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): serviceusage.googleapis.com:443
+2026-04-08 18:31:10,351 DEBUG    urllib3.connectionpool https://serviceusage.googleapis.com:443 "GET /v1/projects/mufiedapi/services/artifactregistry.googleapis.com?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:10,467 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:10,485 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:10,493 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): serviceusage.googleapis.com:443
+2026-04-08 18:31:12,103 DEBUG    urllib3.connectionpool https://serviceusage.googleapis.com:443 "GET /v1/projects/mufiedapi/services/cloudbuild.googleapis.com?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:12,157 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:12,165 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:12,173 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): serviceusage.googleapis.com:443
+2026-04-08 18:31:13,768 DEBUG    urllib3.connectionpool https://serviceusage.googleapis.com:443 "GET /v1/projects/mufiedapi/services/run.googleapis.com?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:13,833 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:13,844 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:13,855 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:13,863 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): asia-south1-run.googleapis.com:443
+2026-04-08 18:31:14,292 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "GET /apis/serving.knative.dev/v1/namespaces/mufiedapi/services/nest-api?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:14,298 DEBUG    root            source_location: gs://run-sources-mufiedapi-asia-south1/services/nest-api/1775651962.664075-def93ca034a846ae9e781547099b22ff.zip#1775651963283721
+2026-04-08 18:31:14,299 DEBUG    root            Existing source_bucket: run-sources-mufiedapi-asia-south1
+2026-04-08 18:31:14,302 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:14,332 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): artifactregistry.googleapis.com:443
+2026-04-08 18:31:15,068 DEBUG    urllib3.connectionpool https://artifactregistry.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/repositories/cloud-run-source-deploy?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:15,074 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:15,115 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): cloudbuild.googleapis.com:443
+2026-04-08 18:31:15,866 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/defaultServiceAccount?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:15,869 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:15,878 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): iam.googleapis.com:443
+2026-04-08 18:31:17,506 DEBUG    urllib3.connectionpool https://iam.googleapis.com:443 "GET /v1/projects/-/serviceAccounts/560137381308-compute@developer.gserviceaccount.com?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:17,509 INFO     ___FILE_ONLY___ Building using Dockerfile and deploying container to Cloud Run service [[1mnest-api[m] in project [[1mmufiedapi[m] region [[1masia-south1[m]
+
+2026-04-08 18:31:17,514 INFO     ___FILE_ONLY___ Building and deploying...
+2026-04-08 18:31:18,802 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "PUT /apis/serving.knative.dev/v1/namespaces/mufiedapi/services/nest-api?alt=json&dryRun=all HTTP/1.1" 200 None
+2026-04-08 18:31:18,812 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:18,845 DEBUG    root            Creating bucket run-sources-mufiedapi-asia-south1 in region asia-south1
+2026-04-08 18:31:18,849 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): storage.googleapis.com:443
+2026-04-08 18:31:19,312 DEBUG    urllib3.connectionpool https://storage.googleapis.com:443 "GET /storage/v1/b/run-sources-mufiedapi-asia-south1?alt=json HTTP/1.1" 200 1276
+2026-04-08 18:31:20,058 DEBUG    urllib3.connectionpool https://storage.googleapis.com:443 "GET /storage/v1/b?alt=json&maxResults=1000&prefix=run-sources-mufiedapi-asia-south1&project=mufiedapi HTTP/1.1" 200 1522
+2026-04-08 18:31:20,061 DEBUG    root            Uploading source to gs://run-sources-mufiedapi-asia-south1/services/nest-api/1775653280.061283-cfc028771b834dcd9b9df720d9d018d0.zip
+2026-04-08 18:31:20,064 INFO     root            Using ignore file at [.\.gcloudignore].
+2026-04-08 18:31:20,066 DEBUG    root            Skipping file [.env]
+2026-04-08 18:31:20,066 DEBUG    root            Skipping file [.env.example]
+2026-04-08 18:31:20,067 DEBUG    root            Skipping file [.gitignore]
+2026-04-08 18:31:20,068 DEBUG    root            Skipping file [.firebase]
+2026-04-08 18:31:20,069 DEBUG    root            Skipping file [dist]
+2026-04-08 18:31:20,069 DEBUG    root            Skipping file [node_modules]
+2026-04-08 18:31:20,131 INFO     root            Using ignore file [.\.gcloudignore]
+2026-04-08 18:31:20,248 INFO     root            Uploading [C:\Users\ADMIN\AppData\Local\Temp\tmpcnu8nfnv\file.zip] to [run-sources-mufiedapi-asia-south1/services/nest-api/1775653280.061283-cfc028771b834dcd9b9df720d9d018d0.zip]
+2026-04-08 18:31:20,687 DEBUG    urllib3.connectionpool https://storage.googleapis.com:443 "POST /upload/storage/v1/b/run-sources-mufiedapi-asia-south1/o?alt=json&name=services%2Fnest-api%2F1775653280.061283-cfc028771b834dcd9b9df720d9d018d0.zip&uploadType=multipart HTTP/1.1" 200 1138
+2026-04-08 18:31:20,729 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:20,764 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): asia-south1-run.googleapis.com:443
+2026-04-08 18:31:24,226 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "POST /v2/projects/mufiedapi/locations/asia-south1/builds:submit?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:24,247 DEBUG    root            On GCE from memory cache: False
+2026-04-08 18:31:24,257 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): cloudbuild.googleapis.com:443
+2026-04-08 18:31:24,575 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:27,256 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:28,784 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:30,421 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:31,886 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:33,411 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:42,312 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:51,144 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:52,692 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:55,634 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:31:56,826 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:03,831 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:05,124 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:06,585 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:09,028 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:10,542 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:11,689 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:13,139 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:14,582 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:16,018 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:17,471 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:19,654 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:21,182 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:22,324 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:23,469 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:32:23,628 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:06,937 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 502 1613
+2026-04-08 18:33:06,938 DEBUG    root            Response returned status 502, retrying
+2026-04-08 18:33:06,939 DEBUG    root            Retrying request to url https://cloudbuild.googleapis.com/v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json after exception HttpError accessing <https://cloudbuild.googleapis.com/v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json>: response: <{'content-type': 'text/html; charset=UTF-8', 'referrer-policy': 'no-referrer', 'content-length': '1613', 'date': 'Wed, 08 Apr 2026 13:03:06 GMT', 'alt-svc': 'h3=":443"; ma=2592000,h3-29=":443"; ma=2592000', 'status': 502}>, content <<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
+  <title>Error 502 (Server Error)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>502.</b> <ins>That’s an error.</ins>
+  <p>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.  <ins>That’s all we know.</ins>
+>
+2026-04-08 18:33:09,331 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:11,585 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:13,582 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:23,673 DEBUG    urllib3.connectionpool https://cloudbuild.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/operations/b560a5ba-ebc5-45a5-b51a-63f538985f79?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:24,009 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "GET /apis/serving.knative.dev/v1/namespaces/mufiedapi/services/nest-api?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:25,308 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "PUT /apis/serving.knative.dev/v1/namespaces/mufiedapi/services/nest-api?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:25,321 DEBUG    urllib3.connectionpool Starting new HTTPS connection (1): run.googleapis.com:443
+2026-04-08 18:33:26,076 DEBUG    urllib3.connectionpool https://run.googleapis.com:443 "GET /v1/projects/mufiedapi/locations/asia-south1/services/nest-api:getIamPolicy?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:26,490 DEBUG    urllib3.connectionpool https://run.googleapis.com:443 "POST /v1/projects/mufiedapi/locations/asia-south1/services/nest-api:setIamPolicy?alt=json HTTP/1.1" 403 None
+2026-04-08 18:33:35,710 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "POST /v1/projects/mufiedapi/locations/asia-south1/operations/6380b40b-db10-4060-8c53-44271bb34d76:wait?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:38,759 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "POST /v1/projects/mufiedapi/locations/asia-south1/operations/6380b40b-db10-4060-8c53-44271bb34d76:wait?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:38,938 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "POST /v1/projects/mufiedapi/locations/asia-south1/operations/6380b40b-db10-4060-8c53-44271bb34d76:wait?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:39,107 DEBUG    urllib3.connectionpool https://asia-south1-run.googleapis.com:443 "POST /v1/projects/mufiedapi/locations/asia-south1/operations/6380b40b-db10-4060-8c53-44271bb34d76:wait?alt=json HTTP/1.1" 200 None
+2026-04-08 18:33:39,159 INFO     ___FILE_ONLY___   Setting IAM policy failed, try "gcloud beta run services add-iam-policy-binding --region=asia-south1 --member=allUsers --role=roles/run.invoker nest-api"
+
+2026-04-08 18:33:39,159 INFO     ___FILE_ONLY___ Service [[1mnest-api[m] revision [[1mnest-api-00042-jz5[m] has been deployed and is serving [1m100[m percent of traffic.
+Service URL: [1mhttps://nest-api-560137381308.asia-south1.run.app[m
+
+2026-04-08 18:33:39,160 DEBUG    root            Chosen display Format:none
+2026-04-08 18:33:39,160 INFO     root            Display format: "none"

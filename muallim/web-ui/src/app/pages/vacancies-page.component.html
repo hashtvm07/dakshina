@@ -1,0 +1,23 @@
+<section class="page-card">
+  <div class="page-intro">
+    <span>Vacancies</span>
+    <h1>Search all vacancy fields</h1>
+    <p>Filter by title, subject, qualification, location, contact, or college name.</p>
+  </div>
+
+  <form [formGroup]="filters" class="filter-grid">
+    <input placeholder="Search any field" formControlName="query" />
+    <input placeholder="Subject" formControlName="subject" />
+    <input placeholder="Location" formControlName="location" />
+  </form>
+
+  <div class="vacancy-grid">
+    <article class="vacancy-card" *ngFor="let vacancy of vacancies$ | async">
+      <span>{{ vacancy.college?.name }}</span>
+      <h2>{{ vacancy.title }}</h2>
+      <p>{{ vacancy.subject }} • {{ vacancy.location }}</p>
+      <p>{{ vacancy.qualification }}</p>
+      <small>Contact: {{ vacancy.contactInfo }}</small>
+    </article>
+  </div>
+</section>

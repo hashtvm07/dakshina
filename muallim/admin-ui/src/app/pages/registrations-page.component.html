@@ -1,0 +1,18 @@
+<section class="page-shell">
+  <div class="page-header">
+    <span>Registrations</span>
+    <h1>Registered Muallims</h1>
+  </div>
+
+  <form class="editor-grid" [formGroup]="form">
+    <input placeholder="Search by Muallim ID or name" formControlName="query" />
+  </form>
+
+  <div class="list-grid">
+    <article class="list-card" *ngFor="let muallim of muallims$ | async">
+      <strong>{{ muallim.name }}</strong>
+      <p>{{ muallim.publicId }}</p>
+      <small>{{ muallim.email }} • {{ muallim.phone }}</small>
+    </article>
+  </div>
+</section>

@@ -1,0 +1,57 @@
+{
+	"folders": [
+		{
+			"path": "muallim"
+		},
+		{
+			"path": "mufied"
+		}
+	],
+	"settings": {},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "GCloud - muallim",
+				"type": "shell",
+				"command": "cmd",
+				"args": [
+					"/k"
+				],
+				"options": {
+					"cwd": "${workspaceFolder:muallim}",
+					"env": {
+						"CLOUDSDK_CONFIG": "${workspaceFolder:muallim}\\.gcloud"
+					}
+				},
+				"presentation": {
+					"panel": "new"
+				},
+				"runOptions": {
+					"instanceLimit": 2
+				},
+				"problemMatcher": []
+			},
+			{
+				"label": "GCloud - mufied",
+				"type": "shell",
+				"command": "cmd",
+				"args": [
+					"/k"
+				],
+				"options": {
+					"cwd": "${workspaceFolder:mufied}",
+					"env": {
+						"CLOUDSDK_CONFIG": "${workspaceFolder:mufied}\\.gcloud"
+					}
+				},
+				"presentation": {
+					"panel": "new"
+				},
+				"runOptions": {
+					"instanceLimit": 2
+				}
+			}
+		]
+	}
+}

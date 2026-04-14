@@ -1,0 +1,30 @@
+<div class="login-shell">
+  <div class="login-card">
+    <p class="eyebrow">MUFIED Admin UI</p>
+    <h1>Admin login</h1>
+    <p class="copy">Only users with the `admin` privilege can access this portal.</p>
+
+    <label class="field">
+      <span>Username</span>
+      <input [ngModel]="username()" (ngModelChange)="username.set($event)" autocomplete="username" />
+    </label>
+
+    <label class="field">
+      <span>Password</span>
+      <input
+        type="password"
+        [ngModel]="password()"
+        (ngModelChange)="password.set($event)"
+        autocomplete="current-password"
+      />
+    </label>
+
+    @if (error()) {
+      <p class="error">{{ error() }}</p>
+    }
+
+    <button type="button" (click)="login()" [disabled]="loading()">
+      {{ loading() ? 'Signing in...' : 'Sign in' }}
+    </button>
+  </div>
+</div>

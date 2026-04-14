@@ -1,0 +1,14 @@
+<section class="page-shell" *ngIf="stats$ | async as stats">
+  <div class="page-header">
+    <span>Overview</span>
+    <h1>Muallim portal admin dashboard</h1>
+    <p>Manage landing content, user permissions, colleges, vacancies, and registrations.</p>
+  </div>
+
+  <div class="stat-grid">
+    <article><strong>{{ stats.users.length }}</strong><span>Users</span></article>
+    <article><strong>{{ stats.muallims.length }}</strong><span>Registered Muallims</span></article>
+    <article><strong>{{ stats.colleges.length }}</strong><span>Colleges</span></article>
+    <article><strong>{{ stats.vacancies.length }}</strong><span>Vacancies</span></article>
+  </div>
+</section>

@@ -1,0 +1,8 @@
+{
+  "baseUrl": "https://nest-api-560137381308.asia-south1.run.app",
+  "endpoints": {
+    "createAdmission": "/api/admissions",
+    "hallTicket": "/api/admissions/hall-ticket",
+    "homeContent": "/api/home-content"
+  }
+}

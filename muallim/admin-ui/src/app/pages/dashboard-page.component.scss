@@ -1,0 +1,22 @@
+.page-shell {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.stat-grid article {
+  padding: 1.4rem;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(224, 245, 231, 0.98));
+  box-shadow: 0 18px 44px rgba(20, 73, 45, 0.12);
+}
+
+.stat-grid strong {
+  display: block;
+  font-size: 2rem;
+}

@@ -1,0 +1,957 @@
+<div class="shell">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+
+  @if (content(); as home) {
+    <nav class="section-strip panel">
+      @for (section of sections; track trackSection($index, section)) {
+        <button
+          class="section-chip"
+          type="button"
+          [class.active]="activeSection() === section.id"
+          (click)="scrollToSection(section.id)"
+        >
+          <strong>{{ section.label }}</strong>
+          <span>{{ section.caption }}</span>
+        </button>
+      }
+    </nav>
+
+    <div class="workspace">
+      <main class="editor-column">
+        <details id="hero" class="editor-panel" [class.focused]="activeSection() === 'hero'" [class.collapsed]="!isSectionOpen('hero')" [open]="isSectionOpen('hero')" (toggle)="onSectionToggle('hero', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('hero')">
+            <span class="accordion-title">Hero</span>
+            <span class="accordion-caption">Top banner, actions, badge, and float cards</span>
+          </summary>
+          @if (isSectionOpen('hero')) {
+          <div class="accordion-body">
+          <div class="field-grid">
+            <label class="field"><span>Banner image</span><input [(ngModel)]="home.hero.bannerImage" /></label>
+            <label class="field"><span>Logo image</span><input [(ngModel)]="home.hero.logoImage" /></label>
+            <label class="field field-wide"><span>Eyebrow</span><input [(ngModel)]="home.hero.eyebrow" /></label>
+            <label class="field field-wide"><span>Title</span><textarea rows="3" [(ngModel)]="home.hero.title"></textarea></label>
+            <label class="field field-wide"><span>Subtitle</span><textarea rows="4" [(ngModel)]="home.hero.subtitle"></textarea></label>
+            <label class="field"><span>Primary action label</span><input [(ngModel)]="home.hero.primaryActionLabel" /></label>
+            <label class="field"><span>Primary action href</span><input [(ngModel)]="home.hero.primaryActionHref" /></label>
+            <label class="field"><span>Secondary action label</span><input [(ngModel)]="home.hero.secondaryActionLabel" /></label>
+            <label class="field"><span>Secondary action href</span><input [(ngModel)]="home.hero.secondaryActionHref" /></label>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Hero badge</h3>
+            </div>
+            <div class="field-grid">
+              <label class="field"><span>Badge text</span><input [(ngModel)]="home.hero.badgeText" /></label>
+            </div>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Primary float card</h3>
+            </div>
+
+            <div class="field-grid">
+              <label class="field field-wide"><span>Title</span><input [(ngModel)]="home.hero.floatingCards.primary.title" /></label>
+            </div>
+
+            <div class="subpanel-head compact">
+              <h3>Primary items</h3>
+              <button class="mini-btn" type="button" (click)="addStringItem(home.hero.floatingCards.primary.items)">Add item</button>
+            </div>
+
+            @for (item of home.hero.floatingCards.primary.items; track trackByIndex($index); let i = $index) {
+              <div class="repeat-row">
+                <input [(ngModel)]="home.hero.floatingCards.primary.items[i]" placeholder="Short float-card line" />
+                <button class="danger-btn" type="button" (click)="removeStringItem(home.hero.floatingCards.primary.items, i)">Remove</button>
+              </div>
+            }
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Secondary float card</h3>
+            </div>
+
+            <div class="field-grid">
+              <label class="field field-wide"><span>Title</span><input [(ngModel)]="home.hero.floatingCards.secondary.title" /></label>
+            </div>
+
+            <div class="subpanel-head compact">
+              <h3>Secondary items</h3>
+              <button class="mini-btn" type="button" (click)="addStringItem(home.hero.floatingCards.secondary.items)">Add item</button>
+            </div>
+
+            @for (item of home.hero.floatingCards.secondary.items; track trackByIndex($index); let i = $index) {
+              <div class="repeat-row">
+                <input [(ngModel)]="home.hero.floatingCards.secondary.items[i]" placeholder="Short float-card line" />
+                <button class="danger-btn" type="button" (click)="removeStringItem(home.hero.floatingCards.secondary.items, i)">Remove</button>
+              </div>
+            }
+          </div>
+          </div>
+          }
+        </details>
+
+        <details id="intro" class="editor-panel" [class.focused]="activeSection() === 'intro'" [class.collapsed]="!isSectionOpen('intro')" [open]="isSectionOpen('intro')" (toggle)="onSectionToggle('intro', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('intro')">
+            <span class="accordion-title">Intro</span>
+            <span class="accordion-caption">Image, article sections, and stat strip</span>
+          </summary>
+          @if (isSectionOpen('intro')) {
+          <div class="accordion-body">
+          <div class="field-grid">
+            <label class="field"><span>Intro image</span><input [(ngModel)]="home.intro.image" /></label>
+            <label class="field"><span>Section label</span><input [(ngModel)]="home.intro.label" /></label>
+            <label class="field field-wide"><span>Title</span><textarea rows="3" [(ngModel)]="home.intro.title"></textarea></label>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Article1 Left Block</h3>
+            </div>
+
+            <div class="card-editor">
+              <div class="card-topline"><strong>Article1 / Section 1</strong></div>
+              <div class="field-grid">
+                <label class="field"><span>Title</span><input [(ngModel)]="home.article1.section1.title" /></label>
+                <label class="field field-wide"><span>Description</span><textarea rows="4" [(ngModel)]="home.article1.section1.description"></textarea></label>
+              </div>
+            </div>
+
+            <div class="card-editor">
+              <div class="card-topline"><strong>Article1 / Section 2</strong></div>
+              <div class="field-grid">
+                <label class="field"><span>Title</span><input [(ngModel)]="home.article1.section2.title" /></label>
+                <label class="field field-wide"><span>Description</span><textarea rows="4" [(ngModel)]="home.article1.section2.description"></textarea></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Article2 Right Block</h3>
+            </div>
+            <div class="card-editor">
+              <div class="card-topline"><strong>Article2 / Section 1</strong></div>
+              <div class="field-grid">
+                <label class="field"><span>Title</span><input [(ngModel)]="home.article2.section1.title" /></label>
+                <label class="field field-wide"><span>Description</span><textarea rows="4" [(ngModel)]="home.article2.section1.description"></textarea></label>
+              </div>
+            </div>
+            <div class="card-editor">
+              <div class="card-topline"><strong>Article2 / Section 2</strong></div>
+              <div class="field-grid">
+                <label class="field"><span>Title</span><input [(ngModel)]="home.article2.section2.title" /></label>
+                <label class="field field-wide"><span>Description</span><textarea rows="4" [(ngModel)]="home.article2.section2.description"></textarea></label>
+              </div>
+            </div>
+            <div class="card-editor">
+              <div class="card-topline"><strong>Article2 / Section 3</strong></div>
+              <div class="field-grid">
+                <label class="field"><span>Title</span><input [(ngModel)]="home.article2.section3.title" /></label>
+                <label class="field field-wide"><span>Description</span><textarea rows="4" [(ngModel)]="home.article2.section3.description"></textarea></label>
+              </div>
+            </div>
+            <div class="card-editor">
+              <div class="card-topline"><strong>Article2 / Section 4</strong></div>
+              <div class="field-grid">
+                <label class="field"><span>Title</span><input [(ngModel)]="home.article2.section4.title" /></label>
+                <label class="field field-wide"><span>Description</span><textarea rows="4" [(ngModel)]="home.article2.section4.description"></textarea></label>
+              </div>
+            </div>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Stats</h3>
+              <button class="mini-btn" type="button" (click)="addStat()">Add stat</button>
+            </div>
+
+            @for (stat of home.intro.stats; track trackByIndex($index); let i = $index) {
+              <div class="field-grid stat-grid">
+                <label class="field"><span>Value</span><input [(ngModel)]="home.intro.stats[i].value" /></label>
+                <label class="field"><span>Label</span><input [(ngModel)]="home.intro.stats[i].label" /></label>
+                <button class="danger-btn align-end" type="button" (click)="removeStat(i)">Remove</button>
+              </div>
+            }
+          </div>
+          </div>
+          }
+        </details>
+
+        <details id="programmes" class="editor-panel" [class.focused]="activeSection() === 'programmes'" [class.collapsed]="!isSectionOpen('programmes')" [open]="isSectionOpen('programmes')" (toggle)="onSectionToggle('programmes', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('programmes')">
+            <span class="accordion-title">Programmes</span>
+            <span class="accordion-caption">Academic cards and destination links</span>
+          </summary>
+          @if (isSectionOpen('programmes')) {
+          <div class="accordion-body">
+          <div class="field-grid">
+            <label class="field"><span>Section label</span><input [(ngModel)]="home.programmes.label" /></label>
+            <label class="field field-wide"><span>Title</span><textarea rows="2" [(ngModel)]="home.programmes.title"></textarea></label>
+            <label class="field field-wide"><span>Subtitle</span><textarea rows="3" [(ngModel)]="home.programmes.subtitle"></textarea></label>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Programme cards</h3>
+              <button class="mini-btn" type="button" (click)="addProgrammeCard()">Add card</button>
+            </div>
+
+            @for (card of home.programmes.cards; track trackByIndex($index); let i = $index) {
+              <div class="card-editor">
+                <div class="card-topline">
+                  <strong>Programme {{ i + 1 }}</strong>
+                  <span>{{ home.programmes.cards[i].featured ? 'Featured' : 'Standard' }}</span>
+                </div>
+
+                <div class="field-grid">
+                  <label class="field"><span>Title</span><input [(ngModel)]="home.programmes.cards[i].title" /></label>
+                  <label class="field"><span>CTA label</span><input [(ngModel)]="home.programmes.cards[i].ctaLabel" /></label>
+                  <label class="field field-wide"><span>Description</span><textarea rows="3" [(ngModel)]="home.programmes.cards[i].description"></textarea></label>
+                  <label class="field field-wide"><span>Href</span><input [(ngModel)]="home.programmes.cards[i].href" /></label>
+                  <label class="checkbox-field">
+                    <input type="checkbox" [(ngModel)]="home.programmes.cards[i].featured" />
+                    <span>Mark as featured</span>
+                  </label>
+                </div>
+
+                <button class="danger-btn" type="button" (click)="removeProgrammeCard(i)">Remove card</button>
+              </div>
+            }
+          </div>
+          </div>
+          }
+        </details>
+
+        <details id="events" class="editor-panel" [class.focused]="activeSection() === 'events'" [class.collapsed]="!isSectionOpen('events')" [open]="isSectionOpen('events')" (toggle)="onSectionToggle('events', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('events')">
+            <span class="accordion-title">Events</span>
+            <span class="accordion-caption">Cards below the banner with descriptions, image uploads, and PDFs</span>
+          </summary>
+          @if (isSectionOpen('events')) {
+          <div class="accordion-body">
+          <div class="field-grid">
+            <label class="field"><span>Section label</span><input [(ngModel)]="home.events.label" /></label>
+            <label class="field field-wide"><span>Section title</span><textarea rows="2" [(ngModel)]="home.events.title"></textarea></label>
+            <label class="field field-wide"><span>Section subtitle</span><textarea rows="3" [(ngModel)]="home.events.subtitle"></textarea></label>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Event cards</h3>
+              <button class="mini-btn" type="button" (click)="addEventCard()">Add event</button>
+            </div>
+
+            @for (eventCard of home.events.cards; track trackByIndex($index); let eventIndex = $index) {
+              <div class="card-editor event-editor">
+                <div class="card-topline">
+                  <strong>Event {{ eventIndex + 1 }}</strong>
+                  <span>{{ home.events.cards[eventIndex].pdfs.length }} PDF{{ home.events.cards[eventIndex].pdfs.length === 1 ? '' : 's' }}</span>
+                </div>
+
+                <div class="field-grid">
+                  <label class="field field-wide"><span>Event name</span><input [(ngModel)]="home.events.cards[eventIndex].title" /></label>
+                  <label class="field field-wide"><span>Image URL</span><input [(ngModel)]="home.events.cards[eventIndex].image" placeholder="Optional image URL or upload below" /></label>
+                </div>
+
+                <div class="document-upload event-upload">
+                  <label class="field field-wide">
+                    <span>Select image from device</span>
+                    <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" (change)="onEventImageSelected(eventIndex, $event)" />
+                  </label>
+
+                  <div class="document-upload__meta">
+                    <span class="muted">
+                      {{ selectedEventImageFileName(eventIndex) || 'No image selected yet' }}
+                    </span>
+                    <span class="muted">Allowed: JPG, PNG, WEBP, GIF up to 2 MB</span>
+                    @if (home.events.cards[eventIndex].image) {
+                      <a
+                        class="mini-btn link-btn"
+                        [href]="home.events.cards[eventIndex].image"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View current image
+                      </a>
+                    }
+                  </div>
+
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    (click)="uploadEventImage(eventIndex)"
+                    [disabled]="uploadingEventImageIndex() === eventIndex"
+                  >
+                    {{ uploadingEventImageIndex() === eventIndex ? 'Uploading...' : 'Upload Image' }}
+                  </button>
+
+                  <button
+                    class="danger-btn"
+                    type="button"
+                    (click)="removeEventImage(eventIndex)"
+                    [disabled]="!home.events.cards[eventIndex].image && !selectedEventImageFileName(eventIndex)"
+                  >
+                    Remove image
+                  </button>
+                </div>
+
+                <div class="subpanel nested-panel">
+                  <div class="subpanel-head compact">
+                    <h3>Descriptions</h3>
+                    <button class="mini-btn" type="button" (click)="addEventDescription(home.events.cards[eventIndex])">Add description</button>
+                  </div>
+
+                  @for (description of home.events.cards[eventIndex].descriptions; track trackByIndex($index); let descriptionIndex = $index) {
+                    <div class="repeat-stack">
+                      <textarea rows="3" [(ngModel)]="home.events.cards[eventIndex].descriptions[descriptionIndex]" placeholder="Event description block"></textarea>
+                      <button class="danger-btn" type="button" (click)="removeEventDescription(home.events.cards[eventIndex], descriptionIndex)">Remove</button>
+                    </div>
+                  }
+                </div>
+
+                <div class="subpanel nested-panel">
+                  <div class="subpanel-head compact">
+                    <h3>Event PDFs</h3>
+                    <button class="mini-btn" type="button" (click)="addEventPdf(home.events.cards[eventIndex])">Add PDF</button>
+                  </div>
+
+                  @for (pdf of home.events.cards[eventIndex].pdfs; track trackByIndex($index); let pdfIndex = $index) {
+                    <div class="card-editor event-pdf-editor">
+                      <div class="field-grid">
+                        <label class="field"><span>PDF title</span><input [(ngModel)]="home.events.cards[eventIndex].pdfs[pdfIndex].title" /></label>
+                        <label class="field"><span>Button label</span><input [(ngModel)]="home.events.cards[eventIndex].pdfs[pdfIndex].ctaLabel" /></label>
+                        <label class="field field-wide"><span>PDF link</span><input [(ngModel)]="home.events.cards[eventIndex].pdfs[pdfIndex].href" /></label>
+                      </div>
+
+                      <div class="document-upload">
+                        <label class="field field-wide">
+                          <span>Select PDF from device</span>
+                          <input type="file" accept=".pdf,application/pdf" (change)="onEventPdfSelected(eventIndex, pdfIndex, $event)" />
+                        </label>
+
+                        <div class="document-upload__meta">
+                          <span class="muted">
+                            {{ selectedEventPdfFileName(eventIndex, pdfIndex) || 'No PDF selected yet' }}
+                          </span>
+                          @if (home.events.cards[eventIndex].pdfs[pdfIndex].href) {
+                            <a
+                              class="mini-btn link-btn"
+                              [href]="home.events.cards[eventIndex].pdfs[pdfIndex].href"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              View current PDF
+                            </a>
+                          }
+                        </div>
+
+                        <div class="event-pdf-actions">
+                          <button
+                            class="btn btn-primary"
+                            type="button"
+                            (click)="uploadEventPdf(eventIndex, pdfIndex)"
+                            [disabled]="isUploadingEventPdf(eventIndex, pdfIndex) || !selectedEventPdfFileName(eventIndex, pdfIndex)"
+                          >
+                            {{ isUploadingEventPdf(eventIndex, pdfIndex) ? 'Uploading...' : 'Upload PDF' }}
+                          </button>
+                          <button
+                            class="danger-btn"
+                            type="button"
+                            (click)="removeEventPdf(eventIndex, pdfIndex)"
+                            [disabled]="isDeletingEventPdf(eventIndex, pdfIndex) || !canDeleteEventPdf(eventIndex, pdfIndex)"
+                          >
+                            {{ isDeletingEventPdf(eventIndex, pdfIndex) ? 'Deleting...' : 'Delete PDF' }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <button
+                  class="danger-btn"
+                  type="button"
+                  (click)="removeEventCard(eventIndex)"
+                  [disabled]="deletingEventIndex() === eventIndex"
+                >
+                  {{ deletingEventIndex() === eventIndex ? 'Deleting...' : 'Remove event' }}
+                </button>
+              </div>
+            }
+          </div>
+          </div>
+          }
+        </details>
+
+        <details id="admission" class="editor-panel" [class.focused]="activeSection() === 'admission'" [class.collapsed]="!isSectionOpen('admission')" [open]="isSectionOpen('admission')" (toggle)="onSectionToggle('admission', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('admission')">
+            <span class="accordion-title">Admission</span>
+            <span class="accordion-caption">Process guidance and campus details</span>
+          </summary>
+          @if (isSectionOpen('admission')) {
+          <div class="accordion-body">
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Process block</h3>
+            </div>
+
+            <div class="field-grid">
+              <label class="field"><span>Label</span><input [(ngModel)]="home.admission.process.label" /></label>
+              <label class="field field-wide"><span>Title</span><textarea rows="2" [(ngModel)]="home.admission.process.title"></textarea></label>
+              <label class="field"><span>Primary label</span><input [(ngModel)]="home.admission.process.primaryActionLabel" /></label>
+              <label class="field"><span>Primary href</span><input [(ngModel)]="home.admission.process.primaryActionHref" /></label>
+              <label class="field"><span>Secondary label</span><input [(ngModel)]="home.admission.process.secondaryActionLabel" /></label>
+              <label class="field"><span>Secondary href</span><input [(ngModel)]="home.admission.process.secondaryActionHref" /></label>
+            </div>
+
+            <div class="subpanel-head compact">
+              <h3>Process items</h3>
+              <button class="mini-btn" type="button" (click)="addStringItem(home.admission.process.items)">Add step</button>
+            </div>
+
+            @for (item of home.admission.process.items; track trackByIndex($index); let i = $index) {
+              <div class="repeat-stack">
+                <textarea rows="3" [(ngModel)]="home.admission.process.items[i]" placeholder="Admission step"></textarea>
+                <button class="danger-btn" type="button" (click)="removeStringItem(home.admission.process.items, i)">Remove</button>
+              </div>
+            }
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Campus block</h3>
+            </div>
+
+            <div class="field-grid">
+              <label class="field"><span>Label</span><input [(ngModel)]="home.admission.campus.label" /></label>
+              <label class="field field-wide"><span>Title</span><textarea rows="2" [(ngModel)]="home.admission.campus.title"></textarea></label>
+              <label class="field field-wide"><span>Paragraph 1</span><textarea rows="3" [(ngModel)]="home.admission.campus.paragraph1"></textarea></label>
+              <label class="field field-wide"><span>Paragraph 2</span><textarea rows="3" [(ngModel)]="home.admission.campus.paragraph2"></textarea></label>
+              <label class="field"><span>Authority Email</span><input [(ngModel)]="home.admission.campus.authorityEmail" /></label>
+            </div>
+          </div>
+          </div>
+          }
+        </details>
+
+        <details id="admissions-list" class="editor-panel" [class.focused]="activeSection() === 'admissions-list'" [class.collapsed]="!isSectionOpen('admissions-list')" [open]="isSectionOpen('admissions-list')" (toggle)="onSectionToggle('admissions-list', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('admissions-list')">
+            <span class="accordion-title">Admissions</span>
+            <span class="accordion-caption">Submitted applications and contact details</span>
+          </summary>
+          @if (isSectionOpen('admissions-list')) {
+          <div class="accordion-body">
+          <p class="muted">Updated: {{ formatTimestamp(admissionsUpdatedAt()) }}</p>
+
+          @if (!admissions().length) {
+            <div class="subpanel">
+              <p class="muted">No admissions found in the current backend.</p>
+            </div>
+          } @else {
+            <div class="admissions-actions">
+              <button
+                class="mini-btn export-btn"
+                type="button"
+                (click)="exportAdmissions()"
+                [disabled]="exportingAdmissions()"
+              >
+                {{ exportingAdmissions() ? 'Preparing export...' : 'Export Data' }}
+              </button>
+            </div>
+            <div class="admissions-table-wrap">
+              <table class="admissions-table">
+                <thead>
+                  <tr>
+                    <th>Application No</th>
+                    <th>Created</th>
+                    <th>Student</th>
+                    <th>Date of Birth</th>
+                    <th>Admission For</th>
+                    <th>Exam Date</th>
+                    <th>Mobile</th>
+                    <th>WhatsApp</th>
+                    <th>Email</th>
+                    <th>Exam Center</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (item of admissions(); track item.applicationNo) {
+                    <tr>
+                      <td>{{ item.applicationNo }}</td>
+                      <td>{{ formatTimestamp(item.createdAt) }}</td>
+                      <td>{{ item.studentName }}</td>
+                      <td>{{ item.studentDateOfBirth }}</td>
+                      <td>{{ item.admissionFor }}</td>
+                      <td>{{ item.examDate }}</td>
+                      <td>{{ item.mobileNumber }}</td>
+                      <td>{{ item.whatsappNumber }}</td>
+                      <td>{{ item.email }}</td>
+                      <td>{{ item.examCenterVenue }}</td>
+                      <td>
+                        <div class="table-actions">
+                          <button
+                            class="mini-btn table-btn"
+                            type="button"
+                            (click)="openAdmissionEditor(item)"
+                            [disabled]="deletingAdmissionNo() === item.applicationNo"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            class="danger-btn table-btn"
+                            type="button"
+                            (click)="deleteAdmission(item)"
+                            [disabled]="deletingAdmissionNo() === item.applicationNo"
+                          >
+                            {{ deletingAdmissionNo() === item.applicationNo ? 'Deleting...' : 'Delete' }}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+          </div>
+          }
+        </details>
+
+        <details id="documents" class="editor-panel" [class.focused]="activeSection() === 'documents'" [class.collapsed]="!isSectionOpen('documents')" [open]="isSectionOpen('documents')" (toggle)="onSectionToggle('documents', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('documents')">
+            <span class="accordion-title">Documents</span>
+            <span class="accordion-caption">Question Bank PDFs and other downloadable resources</span>
+          </summary>
+          @if (isSectionOpen('documents')) {
+          <div class="accordion-body">
+          <div class="field-grid">
+            <label class="field"><span>Section label</span><input [(ngModel)]="home.publications.label" /></label>
+            <label class="field field-wide"><span>Section title</span><textarea rows="2" [(ngModel)]="home.publications.title"></textarea></label>
+            <label class="field field-wide"><span>Section subtitle</span><textarea rows="3" [(ngModel)]="home.publications.subtitle"></textarea></label>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Question Bank PDFs</h3>
+              <button class="mini-btn" type="button" (click)="addDocumentCardOfType('question-bank')">Add PDF</button>
+            </div>
+
+            @for (entry of questionBankDocuments(home); track entry.index) {
+              <div class="card-editor">
+                <div class="card-topline">
+                  <strong>Document {{ entry.index + 1 }}</strong>
+                  <span>{{ entry.card.ctaLabel || 'CTA pending' }}</span>
+                </div>
+
+                <div class="field-grid">
+                  <label class="field"><span>PDF title</span><input [(ngModel)]="entry.card.title" /></label>
+                  <label class="field"><span>Button label</span><input [(ngModel)]="entry.card.ctaLabel" /></label>
+                  <label class="field field-wide"><span>Description</span><textarea rows="3" [(ngModel)]="entry.card.description"></textarea></label>
+                </div>
+
+                <div class="document-upload">
+                  <label class="field field-wide">
+                    <span>Select PDF from device</span>
+                    <input type="file" accept=".pdf,application/pdf" (change)="onDocumentFileSelected(entry.index, $event)" />
+                  </label>
+
+                  <div class="document-upload__meta">
+                    <span class="muted">
+                      {{ selectedDocumentFileName(entry.index) || 'No file selected yet' }}
+                    </span>
+                    @if (hasBrokenDocumentLink(entry.index)) {
+                      <span class="document-warning">
+                        No saved PDF URL exists for this document. Upload again to repair it.
+                      </span>
+                    }
+                    @if (documentFileError(entry.index)) {
+                      <span class="muted" style="color: #b42318;">
+                        {{ documentFileError(entry.index) }}
+                      </span>
+                    }
+                    @if (entry.card.href) {
+                      <a
+                        class="mini-btn link-btn"
+                        [href]="entry.card.href"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View current PDF
+                      </a>
+                    }
+                  </div>
+
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    (click)="uploadDocumentFile(entry.index, 'question-bank')"
+                    [disabled]="uploadingDocumentIndex() === entry.index || !hasPendingDocumentFile(entry.index)"
+                  >
+                    {{ uploadingDocumentIndex() === entry.index ? 'Uploading...' : 'Upload PDF' }}
+                  </button>
+                </div>
+
+                <button
+                  class="danger-btn"
+                  type="button"
+                  (click)="removeDocumentCard(entry.index)"
+                  [disabled]="deletingDocumentIndex() === entry.index || !canDeleteDocumentCard(entry.index)"
+                >
+                  {{ deletingDocumentIndex() === entry.index ? 'Deleting...' : 'Delete PDF' }}
+                </button>
+              </div>
+            }
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Other Docs</h3>
+              <button class="mini-btn" type="button" (click)="addDocumentCardOfType('other-docs')">Add PDF</button>
+            </div>
+
+            @for (entry of otherDocuments(home); track entry.index) {
+              <div class="card-editor">
+                <div class="card-topline">
+                  <strong>Document {{ entry.index + 1 }}</strong>
+                  <span>{{ entry.card.ctaLabel || 'CTA pending' }}</span>
+                </div>
+
+                <div class="field-grid">
+                  <label class="field"><span>PDF title</span><input [(ngModel)]="entry.card.title" /></label>
+                  <label class="field"><span>Button label</span><input [(ngModel)]="entry.card.ctaLabel" /></label>
+                  <label class="field field-wide"><span>Description</span><textarea rows="3" [(ngModel)]="entry.card.description"></textarea></label>
+                </div>
+
+                <div class="document-upload">
+                  <label class="field field-wide">
+                    <span>Select PDF from device</span>
+                    <input type="file" accept=".pdf,application/pdf" (change)="onDocumentFileSelected(entry.index, $event)" />
+                  </label>
+
+                  <div class="document-upload__meta">
+                    <span class="muted">
+                      {{ selectedDocumentFileName(entry.index) || 'No file selected yet' }}
+                    </span>
+                    @if (hasBrokenDocumentLink(entry.index)) {
+                      <span class="document-warning">
+                        No saved PDF URL exists for this document. Upload again to repair it.
+                      </span>
+                    }
+                    @if (documentFileError(entry.index)) {
+                      <span class="muted" style="color: #b42318;">
+                        {{ documentFileError(entry.index) }}
+                      </span>
+                    }
+                    @if (entry.card.href) {
+                      <a
+                        class="mini-btn link-btn"
+                        [href]="entry.card.href"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View current PDF
+                      </a>
+                    }
+                  </div>
+
+                  <button
+                    class="btn btn-primary"
+                    type="button"
+                    (click)="uploadDocumentFile(entry.index, 'other-docs')"
+                    [disabled]="uploadingDocumentIndex() === entry.index || !hasPendingDocumentFile(entry.index)"
+                  >
+                    {{ uploadingDocumentIndex() === entry.index ? 'Uploading...' : 'Upload PDF' }}
+                  </button>
+                </div>
+
+                <button
+                  class="danger-btn"
+                  type="button"
+                  (click)="removeDocumentCard(entry.index)"
+                  [disabled]="deletingDocumentIndex() === entry.index || !canDeleteDocumentCard(entry.index)"
+                >
+                  {{ deletingDocumentIndex() === entry.index ? 'Deleting...' : 'Delete PDF' }}
+                </button>
+              </div>
+            }
+          </div>
+          </div>
+          }
+        </details>
+
+        <details id="hall-ticket" class="editor-panel" [class.focused]="activeSection() === 'hall-ticket'" [class.collapsed]="!isSectionOpen('hall-ticket')" [open]="isSectionOpen('hall-ticket')" (toggle)="onSectionToggle('hall-ticket', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('hall-ticket')">
+            <span class="accordion-title">Hall Ticket</span>
+            <span class="accordion-caption">Titles and footer lines for screen and PDF</span>
+          </summary>
+          @if (isSectionOpen('hall-ticket')) {
+          <div class="accordion-body">
+          <div class="field-grid">
+            <label class="field field-wide"><span>Title 1</span><input [(ngModel)]="home.hallTicket.title1" /></label>
+            <label class="field field-wide"><span>Title 2</span><input [(ngModel)]="home.hallTicket.title2" /></label>
+            <label class="field field-wide"><span>Footer line 1</span><input [(ngModel)]="home.hallTicket.footerLine1" /></label>
+            <label class="field field-wide"><span>Footer line 2</span><input [(ngModel)]="home.hallTicket.footerLine2" /></label>
+            <label class="field field-wide"><span>Footer line 3</span><input [(ngModel)]="home.hallTicket.footerLine3" /></label>
+            <label class="field field-wide"><span>Footer line 4</span><input [(ngModel)]="home.hallTicket.footerLine4" /></label>
+            <label class="field field-wide"><span>Footer line 5</span><input [(ngModel)]="home.hallTicket.footerLine5" /></label>
+          </div>
+          </div>
+          }
+        </details>
+
+        <details id="footer" class="editor-panel" [class.focused]="activeSection() === 'footer'" [class.collapsed]="!isSectionOpen('footer')" [open]="isSectionOpen('footer')" (toggle)="onSectionToggle('footer', $event)">
+          <summary class="accordion-header" (click)="setActiveSection('footer')">
+            <span class="accordion-title">Footer</span>
+            <span class="accordion-caption">Brand block, support cards, and quick links</span>
+          </summary>
+          @if (isSectionOpen('footer')) {
+          <div class="accordion-body">
+          <div class="field-grid">
+            <label class="field"><span>Logo image</span><input [(ngModel)]="home.footer.logoImage" /></label>
+            <label class="field"><span>Section label</span><input [(ngModel)]="home.footer.label" /></label>
+            <label class="field field-wide"><span>Title</span><textarea rows="2" [(ngModel)]="home.footer.title"></textarea></label>
+          </div>
+
+          <div class="subpanel">
+            <div class="subpanel-head">
+              <h3>Footer cards</h3>
+              <button class="mini-btn" type="button" (click)="addFooterCard()">Add card</button>
+            </div>
+
+            @for (card of home.footer.cards; track trackByIndex($index); let i = $index) {
+              <div class="card-editor">
+                <div class="card-topline">
+                  <strong>Footer card {{ i + 1 }}</strong>
+                  <span>{{ (home.footer.cards[i].links ?? []).length }} links</span>
+                </div>
+
+                <div class="field-grid">
+                  <label class="field"><span>Title</span><input [(ngModel)]="home.footer.cards[i].title" /></label>
+                  <label class="field field-wide"><span>Description</span><textarea rows="3" [(ngModel)]="home.footer.cards[i].description"></textarea></label>
+                </div>
+
+                <div class="subpanel nested-panel">
+                  <div class="subpanel-head compact">
+                    <h3>Links</h3>
+                    <button class="mini-btn" type="button" (click)="addFooterLink(home.footer.cards[i])">Add link</button>
+                  </div>
+
+                  @for (link of home.footer.cards[i].links ?? []; track trackByIndex($index); let j = $index) {
+                    <div class="field-grid stat-grid">
+                      <label class="field"><span>Label</span><input [(ngModel)]="home.footer.cards[i].links![j].label" /></label>
+                      <label class="field"><span>Href</span><input [(ngModel)]="home.footer.cards[i].links![j].href" /></label>
+                      <button class="danger-btn align-end" type="button" (click)="removeFooterLink(home.footer.cards[i], j)">
+                        Remove
+                      </button>
+                    </div>
+                  }
+                </div>
+
+                <button class="danger-btn" type="button" (click)="removeFooterCard(i)">Remove card</button>
+              </div>
+            }
+          </div>
+          </div>
+          }
+        </details>
+      </main>
+
+    </div>
+
+    <div class="sticky-publish panel">
+      <div>
+        <strong>{{ hasUnsavedChanges() ? 'Ready to publish changes' : 'No pending edits' }}</strong>
+        <p>{{ status() }}</p>
+      </div>
+      <button class="btn btn-primary" type="button" (click)="save()" [disabled]="loading() || saving() || !hasContent()">
+        {{ saving() ? 'Saving...' : 'Publish Home Content' }}
+      </button>
+    </div>
+  } @else {
+    <section class="empty-state panel">
+      <p class="eyebrow">Admin Portal</p>
+      <h2>Connect to the API to load the content document.</h2>
+      <p>Set the backend base URL, then reload to begin editing.</p>
+    </section>
+  }
+
+  @if (editingAdmission(); as draft) {
+    <div class="modal-backdrop" (click)="closeAdmissionEditor()"></div>
+    <section class="admission-modal panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Edit Admission</p>
+          <h2>{{ draft.applicationNo }}</h2>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary btn-compact" type="button" (click)="saveAdmissionEdits()" [disabled]="admissionSaving()">
+            {{ admissionSaving() ? 'Saving...' : 'Save Admission' }}
+          </button>
+          <button class="mini-btn" type="button" (click)="closeAdmissionEditor()">Close</button>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <label class="field field-wide"><span>Photo Data URL</span><textarea rows="3" [(ngModel)]="draft.photoDataUrl"></textarea></label>
+        <label class="field"><span>Student Name</span><input [(ngModel)]="draft.studentName" /></label>
+        <label class="field"><span>Date of Birth</span><input type="date" [(ngModel)]="draft.studentDateOfBirth" /></label>
+        <label class="field"><span>Aadhaar Number</span><input [(ngModel)]="draft.aadhaarNumber" /></label>
+        <label class="field">
+          <span>Admission For</span>
+          <select [(ngModel)]="draft.admissionFor">
+            @for (option of admissionForOptions; track option) {
+              <option [value]="option">{{ option }}</option>
+            }
+            @if (draft.admissionFor && !hasCanonicalAdmissionForOption(draft.admissionFor)) {
+              <option [value]="draft.admissionFor">{{ draft.admissionFor }}</option>
+            }
+          </select>
+        </label>
+        <label class="field"><span>Father Name</span><input [(ngModel)]="draft.fatherName" /></label>
+        <label class="field"><span>Father Job</span><input [(ngModel)]="draft.fatherJob" /></label>
+        <label class="field"><span>Mother Name</span><input [(ngModel)]="draft.motherName" /></label>
+        <label class="field"><span>Mother Job</span><input [(ngModel)]="draft.motherJob" /></label>
+        <label class="field">
+          <span>State</span>
+          <select [ngModel]="draft.state" (ngModelChange)="onAdmissionStateChange(draft, $event)">
+            <option value="">Select state</option>
+            @for (option of stateOptions(draft.state); track option) {
+              <option [value]="option">{{ option }}</option>
+            }
+          </select>
+        </label>
+        <label class="field">
+          <span>District</span>
+          <select [(ngModel)]="draft.district">
+            <option value="">Select district</option>
+            @for (option of districtOptions(draft.state, draft.district); track option) {
+              <option [value]="option">{{ option }}</option>
+            }
+          </select>
+        </label>
+        <label class="field"><span>Panchayath</span><input [(ngModel)]="draft.panchayath" /></label>
+        <label class="field"><span>Area</span><input [(ngModel)]="draft.area" /></label>
+        <label class="field"><span>Mahallu Name</span><input [(ngModel)]="draft.mahalluName" /></label>
+        <label class="field"><span>Identification Mark 1</span><input [(ngModel)]="draft.identificationMark1" /></label>
+        <label class="field"><span>Identification Mark 2</span><input [(ngModel)]="draft.identificationMark2" /></label>
+        <label class="field"><span>Mobile Number</span><input [(ngModel)]="draft.mobileNumber" /></label>
+        <label class="field"><span>WhatsApp Number</span><input [(ngModel)]="draft.whatsappNumber" /></label>
+        <label class="field"><span>Email</span><input [(ngModel)]="draft.email" /></label>
+        <label class="field"><span>Guardian Name</span><input [(ngModel)]="draft.guardianName" /></label>
+        <label class="field"><span>Guardian Relation</span><input [(ngModel)]="draft.guardianRelation" /></label>
+        <label class="field field-wide"><span>Guardian Address</span><textarea rows="2" [(ngModel)]="draft.guardianAddress"></textarea></label>
+        <label class="field field-wide"><span>Home Address</span><textarea rows="2" [(ngModel)]="draft.homeAddress"></textarea></label>
+        <label class="field field-wide"><span>Residential Address</span><textarea rows="2" [(ngModel)]="draft.residentialAddress"></textarea></label>
+        <label class="field"><span>Religious Panchayath / Municipality</span><input [(ngModel)]="draft.religiousPanchayathMunicipality" /></label>
+        <label class="field"><span>School Name and Place</span><input [(ngModel)]="draft.schoolNameAndPlace" /></label>
+        <label class="field"><span>School Class Completed</span><input [(ngModel)]="draft.schoolClassCompleted" /></label>
+        <label class="field"><span>Madrassa Name and Place</span><input [(ngModel)]="draft.madrassaNameAndPlace" /></label>
+        <label class="field"><span>Madrassa Class Completed</span><input [(ngModel)]="draft.madrassaClassCompleted" /></label>
+        <label class="field"><span>Exam Date</span><input type="date" [(ngModel)]="draft.examDate" /></label>
+        <label class="field">
+          <span>Exam Center Venue</span>
+          <select [(ngModel)]="draft.examCenterVenue">
+            <option value="">Select exam center venue</option>
+            @for (option of examCenterVenueOptions(draft.examCenterVenue); track option) {
+              <option [value]="option">{{ option }}</option>
+            }
+          </select>
+        </label>
+        <label class="field field-wide"><span>Remarks</span><textarea rows="2" [(ngModel)]="draft.remarks"></textarea></label>
+        <label class="checkbox-field">
+          <input type="checkbox" [(ngModel)]="draft.guardianDeclarationAccepted" />
+          <span>Guardian declaration accepted</span>
+        </label>
+      </div>
+
+      <div class="toolbar">
+        <button class="btn btn-ghost" type="button" (click)="closeAdmissionEditor()">Cancel</button>
+        <button class="btn btn-primary" type="button" (click)="saveAdmissionEdits()" [disabled]="admissionSaving()">
+          {{ admissionSaving() ? 'Saving...' : 'Save Admission' }}
+        </button>
+      </div>
+    </section>
+  }
+
+  @if (resultsModalOpen()) {
+    <div class="modal-backdrop" (click)="closeResultsModal()"></div>
+    <section class="results-modal panel">
+      <div class="panel-head">
+        <div>
+          <p class="eyebrow">Results</p>
+          <h2>Update marks of each student</h2>
+        </div>
+        <div class="modal-actions">
+          <button
+            class="btn btn-primary btn-compact"
+            type="button"
+            (click)="downloadResultsPdf()"
+            [disabled]="downloadingResultsPdf() || !admissions().length"
+          >
+            {{ downloadingResultsPdf() ? 'Preparing PDF...' : 'Download Result' }}
+          </button>
+          <button class="mini-btn" type="button" (click)="closeResultsModal()">Close</button>
+        </div>
+      </div>
+
+      <div class="field-grid">
+        <label class="field field-wide">
+          <span>Subject</span>
+          <input [ngModel]="resultsSubject()" (ngModelChange)="resultsSubject.set($event)" placeholder="Enter subject" />
+        </label>
+      </div>
+
+      <div class="results-table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Subject</th>
+              <th>Mark</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of admissions(); track item.applicationNo) {
+              <tr>
+                <td class="results-student">
+                  <div class="results-name">{{ item.studentName }}</div>
+                  <div>{{ item.applicationNo }}</div>
+                  <div>{{ item.admissionFor }}</div>
+                  <div>{{ item.studentDateOfBirth }}</div>
+                  <div>{{ item.mobileNumber }}</div>
+                  <div>{{ item.email }}</div>
+                </td>
+                <td>
+                  {{ resultsSubject().trim() || item.resultSubject || '-' }}
+                </td>
+                <td>
+                  <input
+                    class="results-mark-input"
+                    [(ngModel)]="item.resultMark"
+                    placeholder="Mark"
+                  />
+                </td>
+                <td>
+                  <button
+                    class="btn btn-primary results-update-btn"
+                    type="button"
+                    (click)="updateResult(item)"
+                    [disabled]="updatingResultApplicationNo() === item.applicationNo || !canSaveResult(item)"
+                  >
+                    {{ updatingResultApplicationNo() === item.applicationNo ? 'Saving...' : 'Update Mark' }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</div>

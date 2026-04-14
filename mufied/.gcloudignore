@@ -1,0 +1,26 @@
+# Keep Cloud Run source uploads limited to application source and config.
+.gcloud/
+.git/
+.gitignore
+
+# Dependency trees and local build output.
+**/node_modules/
+**/dist/
+**/.angular/
+**/.firebase/
+**/coverage/
+
+# Local editor and OS artifacts.
+**/.vscode/
+**/.idea/
+**/.DS_Store
+**/Thumbs.db
+
+# Logs and temporary files.
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.cache/
+**/tmp/
+**/temp/

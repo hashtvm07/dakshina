@@ -1,0 +1,10 @@
+{
+  "baseUrl": "https://nest-api-560137381308.asia-south1.run.app",
+  "endpoints": {
+    "login": "/api/admin/auth/login",
+    "currentAdmin": "/api/admin/auth/me",
+    "users": "/api/admin/users",
+    "homeContentAdmin": "/api/admin/home-content",
+    "admissionsAdmin": "/api/admissions"
+  }
+}

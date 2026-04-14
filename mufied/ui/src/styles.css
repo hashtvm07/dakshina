@@ -1,0 +1,154 @@
+:root {
+  --bg: #f4fff6;
+  --surface: rgba(255, 255, 255, 0.82);
+  --primary: #0e7a43;
+  --primary-deep: #07532d;
+  --accent: #54b768;
+  --accent-soft: #dff8e3;
+  --ink: #0f2d1d;
+  --ink-soft: #4d6b5a;
+  --line: rgba(14, 122, 67, 0.14);
+  --shadow-lg: 0 28px 60px rgba(19, 88, 55, 0.18);
+  --shadow-md: 0 18px 38px rgba(19, 88, 55, 0.14);
+  --radius-xl: 28px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(84, 183, 104, 0.28), transparent 32%),
+    radial-gradient(circle at top right, rgba(14, 122, 67, 0.18), transparent 28%),
+    linear-gradient(180deg, #fbfffc 0%, #edfbf0 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.35), transparent 40%),
+    repeating-linear-gradient(135deg, rgba(14, 122, 67, 0.03) 0, rgba(14, 122, 67, 0.03) 12px, rgba(255, 255, 255, 0) 12px, rgba(255, 255, 255, 0) 24px);
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.page {
+  display: grid;
+  gap: 1.5rem;
+  animation: page-enter 400ms ease;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+}
+
+.btn,
+button[type='submit'] {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.95rem 1.4rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.btn-primary,
+button[type='submit'] {
+  color: white;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 16px 30px rgba(14, 122, 67, 0.26);
+}
+
+.btn-secondary {
+  color: var(--primary-deep);
+  background: white;
+  border: 1px solid rgba(14, 122, 67, 0.18);
+}
+
+.grid-two {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.grid-three {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field label {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(14, 122, 67, 0.16);
+  border-radius: 16px;
+  outline: none;
+}
+
+.muted {
+  color: var(--ink-soft);
+}
+
+.error-text {
+  color: #a02222;
+  font-size: 0.85rem;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 960px) {
+  .grid-three {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .grid-two {
+    grid-template-columns: 1fr;
+  }
+}

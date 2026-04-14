@@ -1,0 +1,102 @@
+.app-shell {
+  min-height: 100vh;
+  padding: 1.4rem;
+}
+
+.topbar,
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  border-radius: 22px;
+  box-shadow: 0 14px 34px rgba(20, 73, 45, 0.1);
+}
+
+.brand,
+.nav-links a,
+.footer-links a {
+  text-decoration: none;
+  color: #0b4226;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-copy {
+  display: grid;
+}
+
+.brand-copy small {
+  color: #4b725b;
+}
+
+.brand-mark {
+  width: 2.8rem;
+  height: 2.8rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0f6d3d, #7dd09d);
+  color: #fff;
+  font-weight: 800;
+}
+
+.nav-links,
+.footer-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-links a.active {
+  color: #0f6d3d;
+  font-weight: 700;
+}
+
+.search-chip {
+  display: flex;
+  gap: 0.65rem;
+}
+
+.search-chip input,
+.search-chip button {
+  border-radius: 999px;
+  border: 1px solid rgba(18, 91, 55, 0.16);
+  padding: 0.8rem 1rem;
+}
+
+.search-chip button {
+  background: linear-gradient(135deg, #0f6d3d, #57b27b);
+  color: #fff;
+  font-weight: 700;
+}
+
+main {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.footer {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 960px) {
+  .topbar,
+  .footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .nav-links,
+  .footer-links {
+    flex-wrap: wrap;
+  }
+}

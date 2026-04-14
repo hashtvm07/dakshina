@@ -1,0 +1,40 @@
+<section class="page-shell">
+  <div class="page-header">
+    <span>Content</span>
+    <h1>Manage banner content and images</h1>
+  </div>
+
+  <div class="content-grid">
+    <form class="editor-card" [formGroup]="blockForm" (ngSubmit)="saveBlock()">
+      <h2>{{ editingBlockId ? 'Edit' : 'Create' }} content block</h2>
+      <input placeholder="Title" formControlName="title" />
+      <textarea rows="4" placeholder="Body" formControlName="body"></textarea>
+      <input placeholder="Image URL" formControlName="imageUrl" />
+      <input type="number" placeholder="Sort Order" formControlName="sortOrder" />
+      <button type="submit">{{ editingBlockId ? 'Update' : 'Add' }} Content Block</button>
+    </form>
+
+    <form class="editor-card" [formGroup]="mediaForm" (ngSubmit)="saveMedia()">
+      <h2>{{ editingMediaId ? 'Edit' : 'Create' }} media asset</h2>
+      <input placeholder="Title" formControlName="title" />
+      <input placeholder="Image URL" formControlName="imageUrl" />
+      <input placeholder="Category" formControlName="category" />
+      <button type="submit">{{ editingMediaId ? 'Update' : 'Add' }} Media Asset</button>
+    </form>
+  </div>
+
+  <div class="list-grid">
+    <article class="list-card" *ngFor="let block of blocks$ | async">
+      <strong>{{ block.title }}</strong>
+      <p>{{ block.body }}</p>
+      <button type="button" (click)="editBlock(block)">Edit</button>
+      <button type="button" (click)="removeBlock(block.id)">Delete</button>
+    </article>
+    <article class="list-card" *ngFor="let item of media$ | async">
+      <strong>{{ item.title }}</strong>
+      <p>{{ item.category }}</p>
+      <button type="button" (click)="editMedia(item)">Edit</button>
+      <button type="button" (click)="removeMedia(item.id)">Delete</button>
+    </article>
+  </div>
+</section>

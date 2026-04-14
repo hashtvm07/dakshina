@@ -1,0 +1,36 @@
+<section class="page-shell" *ngIf="data$ | async as data">
+  <div class="page-header">
+    <span>User Management</span>
+    <h1>Create users and assign visible menus/pages</h1>
+  </div>
+
+  <form class="editor-grid" [formGroup]="form" (ngSubmit)="createUser()">
+    <input placeholder="Name" formControlName="name" />
+    <input placeholder="Username" formControlName="username" />
+    <input placeholder="Email" formControlName="email" />
+    <input placeholder="Phone" formControlName="phone" />
+    <input placeholder="Address" formControlName="address" />
+    <input type="password" placeholder="Password" formControlName="password" />
+    <select formControlName="userType">
+      <option *ngFor="let type of data.meta.userTypes" [value]="type">{{ type }}</option>
+    </select>
+
+    <div class="menu-picker">
+      <label *ngFor="let menu of data.meta.menuOptions">
+        <input type="checkbox" (change)="toggleMenu(menu.key, $any($event.target).checked)" />
+        {{ menu.label }} ({{ menu.route }})
+      </label>
+    </div>
+
+    <button type="submit">Create User</button>
+  </form>
+
+  <div class="list-grid">
+    <article class="list-card" *ngFor="let user of data.users">
+      <strong>{{ user.name }}</strong>
+      <p>{{ user.userType }}</p>
+      <small>{{ user.allowedMenus.join(', ') }}</small>
+      <button type="button" (click)="removeUser(user.id)">Delete</button>
+    </article>
+  </div>
+</section>

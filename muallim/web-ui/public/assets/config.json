@@ -1,0 +1,8 @@
+{
+  "apiBaseUrl": "http://localhost:3000",
+  "endpoints": {
+    "sitePublic": "/api/site/public",
+    "muallimRegister": "/api/muallims/register",
+    "vacancies": "/api/vacancies"
+  }
+}

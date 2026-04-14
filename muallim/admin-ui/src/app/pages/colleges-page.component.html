@@ -1,0 +1,23 @@
+<section class="page-shell">
+  <div class="page-header">
+    <span>Colleges</span>
+    <h1>Add, edit, and delete colleges</h1>
+  </div>
+
+  <form class="editor-grid" [formGroup]="form" (ngSubmit)="save()">
+    <input placeholder="College Name" formControlName="name" />
+    <input placeholder="Location" formControlName="location" />
+    <input placeholder="District" formControlName="district" />
+    <input placeholder="State" formControlName="state" />
+    <button type="submit">{{ editingId ? 'Update' : 'Add' }} College</button>
+  </form>
+
+  <div class="list-grid">
+    <article class="list-card" *ngFor="let college of colleges$ | async">
+      <strong>{{ college.name }}</strong>
+      <p>{{ college.location }}, {{ college.district }}, {{ college.state }}</p>
+      <button type="button" (click)="edit(college)">Edit</button>
+      <button type="button" (click)="remove(college.id)">Delete</button>
+    </article>
+  </div>
+</section>

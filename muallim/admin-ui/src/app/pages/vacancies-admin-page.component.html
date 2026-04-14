@@ -1,0 +1,31 @@
+<section class="page-shell" *ngIf="data$ | async as data">
+  <div class="page-header">
+    <span>Vacancies</span>
+    <h1>Enter Muallim vacancies by college</h1>
+  </div>
+
+  <form class="editor-grid" [formGroup]="form" (ngSubmit)="save()">
+    <input placeholder="Title" formControlName="title" />
+    <input placeholder="Subject" formControlName="subject" />
+    <input type="number" placeholder="Total Positions" formControlName="totalPositions" />
+    <input placeholder="Location" formControlName="location" />
+    <input placeholder="Qualification" formControlName="qualification" />
+    <input type="date" formControlName="lastDate" />
+    <input placeholder="Contact Info" formControlName="contactInfo" />
+    <textarea rows="3" placeholder="Notes" formControlName="notes"></textarea>
+    <select formControlName="collegeId">
+      <option *ngFor="let college of data.colleges" [value]="college.id">{{ college.name }}</option>
+    </select>
+    <button type="submit">{{ editingId ? 'Update' : 'Add' }} Vacancy</button>
+  </form>
+
+  <div class="list-grid">
+    <article class="list-card" *ngFor="let vacancy of data.vacancies">
+      <strong>{{ vacancy.title }}</strong>
+      <p>{{ vacancy.college?.name }} • {{ vacancy.subject }}</p>
+      <small>{{ vacancy.location }} • {{ vacancy.contactInfo }}</small>
+      <button type="button" (click)="edit(vacancy)">Edit</button>
+      <button type="button" (click)="remove(vacancy.id)">Delete</button>
+    </article>
+  </div>
+</section>

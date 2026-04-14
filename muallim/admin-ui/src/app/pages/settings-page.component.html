@@ -1,0 +1,18 @@
+<section class="page-shell">
+  <div class="page-header">
+    <span>Settings</span>
+    <h1>Landing settings and register menu toggle</h1>
+  </div>
+
+  <form class="editor-grid" [formGroup]="form" (ngSubmit)="save()">
+    <label><span>Hero Title</span><input formControlName="heroTitle" /></label>
+    <label><span>Hero Subtitle</span><input formControlName="heroSubtitle" /></label>
+    <label class="full"><span>Hero Description</span><textarea rows="4" formControlName="heroDescription"></textarea></label>
+    <label><span>Hero Image URL</span><input formControlName="heroImageUrl" /></label>
+    <label><span>Banner Image URL</span><input formControlName="bannerImageUrl" /></label>
+    <label><span>About Title</span><input formControlName="aboutTitle" /></label>
+    <label class="full"><span>About Body</span><textarea rows="4" formControlName="aboutBody"></textarea></label>
+    <label class="toggle"><input type="checkbox" formControlName="registerEnabled" /> Register menu enabled</label>
+    <button type="submit">Save Settings</button>
+  </form>
+</section>

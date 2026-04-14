@@ -1,0 +1,8 @@
+2026-04-06 21:06:06,595 DEBUG    root            Loaded Command Group: ['gcloud', 'config']
+2026-04-06 21:06:06,604 DEBUG    root            Loaded Command Group: ['gcloud', 'config', 'get_value']
+2026-04-06 21:06:06,606 DEBUG    root            Running [gcloud.config.get-value] with arguments: [SECTION/PROPERTY: "project"]
+2026-04-06 21:06:06,606 DEBUG    root            Chosen display Format:value(.)
+2026-04-06 21:06:06,607 INFO     root            Display format: "value(.)"
+2026-04-06 21:06:06,607 INFO     ___FILE_ONLY___ coolpexwebchat
+
+2026-04-06 21:06:06,737 DEBUG    root            On GCE from disk cache: False

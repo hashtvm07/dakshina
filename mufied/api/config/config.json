@@ -1,0 +1,27 @@
+{
+  "firebase": {
+    "databaseUrl": "https://mufied2-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    "serviceAccountPath": "./config/firebase-service-account.json",
+    "projectId": "",
+    "clientEmail": "",
+    "privateKey": ""
+  },
+  "server": {
+    "port": 8081
+  },
+  "cors": {
+    "origins": [
+      "https://mufied2.web.app",
+      "https://mufied.in",
+      "http://mufied.in",
+      "https://admin.mufied.in",
+      "http://admin.mufied.in",
+      "https://mentor.mufied.in",
+      "http://mentor.mufied.in",
+      "https://student.mufied.in",
+      "http://student.mufied.in",
+      "https://mufiedadmin.web.app",
+      "http://localhost:4200"
+    ]
+  }
+}

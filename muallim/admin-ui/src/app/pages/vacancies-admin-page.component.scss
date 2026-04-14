@@ -1,0 +1,14 @@
+.editor-grid,
+.list-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.editor-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.editor-grid textarea,
+.editor-grid button {
+  grid-column: 1 / -1;
+}

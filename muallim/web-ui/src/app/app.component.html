@@ -1,0 +1,44 @@
+<div class="app-shell" *ngIf="siteFacade.sitePayload$ | async as site">
+  <header class="topbar">
+    <a class="brand" routerLink="/">
+      <span class="brand-mark">M</span>
+      <span class="brand-copy">
+        <strong>Muallim Portal</strong>
+        <small>Dakshina network</small>
+      </span>
+    </a>
+
+    <nav class="nav-links">
+      <a
+        *ngFor="let item of navItems"
+        [routerLink]="item.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.path === '/' }"
+      >
+        {{ item.label }}
+      </a>
+      <a *ngIf="site.settings.registerEnabled" routerLink="/register" routerLinkActive="active">Register</a>
+    </nav>
+
+    <form class="search-chip" (ngSubmit)="submitSearch()">
+      <input [(ngModel)]="searchId" name="searchId" placeholder="Search Muallim ID" />
+      <button type="submit">Find</button>
+    </form>
+  </header>
+
+  <main>
+    <router-outlet />
+  </main>
+
+  <footer class="footer">
+    <div>
+      <strong>Muallim Portal</strong>
+      <p>Registration, discovery, and vacancy publishing in one structured system.</p>
+    </div>
+    <div class="footer-links">
+      <a routerLink="/">Home</a>
+      <a routerLink="/vacancies">Vacancies</a>
+      <a *ngIf="site.settings.registerEnabled" routerLink="/register">Register</a>
+    </div>
+  </footer>
+</div>

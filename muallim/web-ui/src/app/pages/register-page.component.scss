@@ -1,0 +1,47 @@
+.page-card,
+.success-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 20px 48px rgba(20, 73, 45, 0.14);
+}
+
+.data-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.data-form label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+.data-form input,
+.data-form textarea,
+.data-form button {
+  border-radius: 16px;
+  border: 1px solid rgba(18, 91, 55, 0.16);
+  padding: 0.95rem 1rem;
+}
+
+.data-form button {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, #0f6d3d, #57b27b);
+  color: #fff;
+  font-weight: 700;
+}
+
+.success-card {
+  margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+  .data-form {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,12 @@
+<section class="profile-card" *ngIf="muallim$ | async as muallim">
+  <span>Muallim Profile</span>
+  <h1>{{ muallim.name }}</h1>
+  <div class="profile-grid">
+    <article><strong>Muallim ID</strong><p>{{ muallim.publicId }}</p></article>
+    <article><strong>Username</strong><p>{{ muallim.username }}</p></article>
+    <article><strong>Email</strong><p>{{ muallim.email }}</p></article>
+    <article><strong>Phone</strong><p>{{ muallim.phone }}</p></article>
+    <article class="wide"><strong>Address</strong><p>{{ muallim.address }}</p></article>
+    <article class="wide" *ngIf="muallim.bio"><strong>Bio</strong><p>{{ muallim.bio }}</p></article>
+  </div>
+</section>
