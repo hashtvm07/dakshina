@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
+import { HomeContentApiService } from './services/home-content-api.service';
 
 @Component({
   selector: 'app-root',
@@ -54,7 +55,9 @@ import { filter } from 'rxjs';
 
           <a routerLink="/admission" [class.active]="isActive('/admission')" (click)="closeAllMenus()">Admission</a>
           <a routerLink="/hall-ticket" [class.active]="isActive('/hall-ticket')" (click)="closeAllMenus()">Hall Ticket</a>
-          <a routerLink="/exam-result" [class.active]="isActive('/exam-result')" (click)="closeAllMenus()">Exam Result</a>
+          @if (showExamResultMenu()) {
+            <a routerLink="/exam-result" [class.active]="isActive('/exam-result')" (click)="closeAllMenus()">Exam Result</a>
+          }
         </nav>
       </header>
 
@@ -245,11 +248,14 @@ import { filter } from 'rxjs';
 })
 export class App {
   private readonly router = inject(Router);
+  private readonly homeContentApi = inject(HomeContentApiService);
   openMenu: 'about' | 'academics' | null = null;
   mobileMenuOpen = false;
   currentPath = this.router.url.split('?')[0].split('#')[0];
+  readonly showExamResultMenu = signal(true);
 
   constructor() {
+    void this.loadNavigationVisibility();
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       this.currentPath = this.router.url.split('?')[0].split('#')[0];
       this.closeAllMenus();
@@ -277,5 +283,14 @@ export class App {
   closeAllMenus() {
     this.openMenu = null;
     this.mobileMenuOpen = false;
+  }
+
+  private async loadNavigationVisibility() {
+    try {
+      const content = await this.homeContentApi.getHomeContent();
+      this.showExamResultMenu.set(content.hallTicket.showExamResultMenu !== false);
+    } catch {
+      this.showExamResultMenu.set(true);
+    }
   }
 }

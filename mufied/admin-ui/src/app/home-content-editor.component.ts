@@ -120,6 +120,7 @@ export class HomeContentEditorComponent {
   protected readonly deletingAdmissionNo = signal<string | null>(null);
   protected readonly exportingAdmissions = signal(false);
   protected readonly downloadingResultsPdf = signal(false);
+  protected readonly togglingResultMenuVisibility = signal(false);
   protected readonly contentJson = signal('');
   protected readonly selectedDocumentFiles = signal<Record<number, string>>({});
   protected readonly documentFileErrors = signal<Record<number, string>>({});
@@ -718,6 +719,42 @@ export class HomeContentEditorComponent {
     this.resultsModalOpen.set(false);
     if (this.activeSection() === 'results') {
       this.activeSection.set('admissions-list');
+    }
+  }
+
+  protected isExamResultMenuVisible() {
+    return this.content()?.hallTicket.showExamResultMenu !== false;
+  }
+
+  protected async toggleExamResultMenuVisibility() {
+    const content = this.content();
+    if (!content || this.togglingResultMenuVisibility()) {
+      return;
+    }
+
+    const previousContent = this.clone(content);
+    const nextContent = this.clone(content);
+    nextContent.hallTicket.showExamResultMenu = !this.isExamResultMenuVisible();
+
+    this.content.set(nextContent);
+    this.contentJson.set(JSON.stringify(nextContent, null, 2));
+    this.togglingResultMenuVisibility.set(true);
+    this.status.set(`${nextContent.hallTicket.showExamResultMenu ? 'Showing' : 'Hiding'} Exam Result menu...`);
+
+    try {
+      const response = await this.adminService.updateHomeContent(this.apiBaseUrl(), nextContent);
+      const cloned = this.clone(response.content);
+      this.content.set(cloned);
+      this.contentJson.set(JSON.stringify(cloned, null, 2));
+      this.savedContentJson.set(JSON.stringify(cloned));
+      this.lastSavedAt.set(new Date().toISOString());
+      this.status.set(`Exam Result menu ${cloned.hallTicket.showExamResultMenu ? 'shown' : 'hidden'} successfully.`);
+    } catch (error) {
+      this.content.set(previousContent);
+      this.contentJson.set(JSON.stringify(previousContent, null, 2));
+      this.status.set(this.formatError(error, 'Unable to update Exam Result menu visibility.'));
+    } finally {
+      this.togglingResultMenuVisibility.set(false);
     }
   }
 

@@ -49,6 +49,7 @@ export type HallTicketSettings = {
   footerLine3: string;
   footerLine4: string;
   footerLine5: string;
+  showExamResultMenu: boolean;
 };
 
 export type HomeContentDocument = {

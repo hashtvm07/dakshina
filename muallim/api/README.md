@@ -59,6 +59,14 @@ $ npm run test:cov
 
 ## Deployment
 
+Set `PORT` from the platform and configure PostgreSQL with one of these options before starting the API:
+
+- `DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/DB_NAME`
+- `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`
+- `DB_SOCKET_PATH=/cloudsql/PROJECT_ID:REGION:INSTANCE` for Cloud Run with Cloud SQL socket mounts
+
+In production, the API now fails fast if none of `DATABASE_URL`, `DB_HOST`, or `DB_SOCKET_PATH` is provided. That avoids the previous fallback to `127.0.0.1:5432`, which causes Cloud Run revisions to fail startup unless a local PostgreSQL proxy is running inside the container.
+
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
 If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:

@@ -18,5 +18,6 @@ RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/config ./config
+COPY --from=build /app/feature ./feature
 
 CMD ["node", "dist/main.js"]

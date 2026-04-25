@@ -3,10 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './health/health.controller';
 import { BootstrapService } from './bootstrap/bootstrap.service';
-import { College } from './colleges/entities/college.entity';
 import { CollegesModule } from './colleges/colleges.module';
-import { Muallim } from './muallims/entities/muallim.entity';
+import { College } from './colleges/entities/college.entity';
+import { createDatabaseConfig } from './config/database.config';
 import { MuallimsModule } from './muallims/muallims.module';
+import { Muallim } from './muallims/entities/muallim.entity';
 import { ContentBlock } from './site/entities/content-block.entity';
 import { MediaAsset } from './site/entities/media-asset.entity';
 import { SiteSettings } from './site/entities/site-settings.entity';
@@ -24,21 +25,7 @@ import { VacanciesModule } from './vacancies/vacancies.module';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST', '127.0.0.1'),
-        port: configService.get<number>('DB_PORT', 5432),
-        username: configService.get<string>('DB_USERNAME', 'postgres'),
-        password: configService.get<string>('DB_PASSWORD', 'postgres'),
-        database: configService.get<string>('DB_NAME', 'muallim_portal'),
-        autoLoadEntities: true,
-        entities: [User, Muallim, SiteSettings, ContentBlock, MediaAsset, College, Vacancy],
-        synchronize: configService.get<string>('DB_SYNC', 'true') === 'true',
-        ssl:
-          configService.get<string>('DB_SSL', 'false') === 'true'
-            ? { rejectUnauthorized: false }
-            : false,
-      }),
+      useFactory: (configService: ConfigService) => createDatabaseConfig(configService),
     }),
     TypeOrmModule.forFeature([User, Muallim, SiteSettings, ContentBlock, MediaAsset, College, Vacancy]),
     SiteModule,

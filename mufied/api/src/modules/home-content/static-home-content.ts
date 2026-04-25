@@ -174,6 +174,7 @@ export const STATIC_HOME_CONTENT: HomeContentDocument = {
     footerLine3: 'Ph: 04742733868, Mob: 9447724432, 9895833868',
     footerLine4: 'mufied313@gmail.com, www.mufied.in/admin-ui',
     footerLine5: 'Cource Recognized by: Jamia Mannaniyya Islamic University, Varkkala',
+    showExamResultMenu: true,
   },
   footer: {
     logoImage: '/assets/images/logo.jpeg',

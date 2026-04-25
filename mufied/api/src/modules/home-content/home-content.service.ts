@@ -470,6 +470,7 @@ export class HomeContentService {
         footerLine3: content.hallTicket?.footerLine3 ?? STATIC_HOME_CONTENT.hallTicket.footerLine3,
         footerLine4: content.hallTicket?.footerLine4 ?? STATIC_HOME_CONTENT.hallTicket.footerLine4,
         footerLine5: content.hallTicket?.footerLine5 ?? STATIC_HOME_CONTENT.hallTicket.footerLine5,
+        showExamResultMenu: content.hallTicket?.showExamResultMenu ?? STATIC_HOME_CONTENT.hallTicket.showExamResultMenu,
       },
     };
   }
@@ -487,7 +488,8 @@ export class HomeContentService {
       content.publications?.cards?.some((card) => Boolean(card.kind) && !card.href?.trim()) ||
       content.publications?.cards?.some((card) => this.isPdfCard(card) && !card.kind) ||
       !content.admission?.campus?.authorityEmail ||
-      !content.hallTicket
+      !content.hallTicket ||
+      typeof content.hallTicket?.showExamResultMenu !== 'boolean'
     );
   }
 

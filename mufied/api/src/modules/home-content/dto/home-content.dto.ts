@@ -258,6 +258,9 @@ class HallTicketDto {
 
   @IsString()
   footerLine5!: string;
+
+  @IsBoolean()
+  showExamResultMenu!: boolean;
 }
 
 class AdmissionProcessDto {
