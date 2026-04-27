@@ -1,0 +1,44 @@
+<div class="admissions-container">
+  @if (message()) {
+    <div class="message-box">
+      {{ message() }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading">Loading admissions...</div>
+  } @else if (admissions().length === 0) {
+    <div class="no-data">No admitted students yet.</div>
+  } @else {
+    <div class="table-wrapper">
+      <table class="admissions-table">
+        <thead>
+          <tr>
+            <th>Admission Number</th>
+            <th>Student Name</th>
+            <th>Program</th>
+            <th>Application No</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>State</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (admission of admissions(); track admission.applicationNo) {
+            <tr>
+              <td class="admission-number-cell">
+                <span class="admission-number">{{ admission.admissionNumber }}</span>
+              </td>
+              <td class="student-name">{{ admission.studentName }}</td>
+              <td class="program">{{ admission.admissionFor }}</td>
+              <td class="mono">{{ admission.applicationNo }}</td>
+              <td class="email-cell">{{ admission.email }}</td>
+              <td>{{ admission.mobileNumber }}</td>
+              <td>{{ admission.state }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

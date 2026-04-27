@@ -55,6 +55,8 @@ export type ManagedAdmission = {
   remarks?: string;
   resultSubject?: string;
   resultMark?: string;
+  status: 'application' | 'admitted';
+  admissionNumber?: string;
 };
 
 export type ManagedUser = {
@@ -253,6 +255,48 @@ export class HomeContentAdminService {
     return firstValueFrom(
       this.http.delete<{ message: string; applicationNo: string }>(
         `${baseUrl}${config.endpoints.admissionsAdmin}/${applicationNo}`,
+        {
+          headers: this.buildAuthHeaders(),
+        },
+      ),
+    );
+  }
+
+  async getApplications(baseUrlOverride?: string) {
+    const config = await this.getApiConfig();
+    const baseUrl = (baseUrlOverride || config.baseUrl).replace(/\/$/, '');
+    return firstValueFrom(
+      this.http.get<{
+        items: ManagedAdmission[];
+        total: number;
+        updatedAt: string;
+      }>(`${baseUrl}${config.endpoints.admissionsAdmin}?status=application`, {
+        headers: this.buildAuthHeaders(),
+      }),
+    );
+  }
+
+  async getAdmittedStudents(baseUrlOverride?: string) {
+    const config = await this.getApiConfig();
+    const baseUrl = (baseUrlOverride || config.baseUrl).replace(/\/$/, '');
+    return firstValueFrom(
+      this.http.get<{
+        items: ManagedAdmission[];
+        total: number;
+        updatedAt: string;
+      }>(`${baseUrl}${config.endpoints.admissionsAdmin}?status=admitted`, {
+        headers: this.buildAuthHeaders(),
+      }),
+    );
+  }
+
+  async admitStudent(baseUrlOverride: string | undefined, applicationNo: string) {
+    const config = await this.getApiConfig();
+    const baseUrl = (baseUrlOverride || config.baseUrl).replace(/\/$/, '');
+    return firstValueFrom(
+      this.http.post<{ message: string; item: ManagedAdmission }>(
+        `${baseUrl}${config.endpoints.admissionsAdmin}/${applicationNo}/admit`,
+        {},
         {
           headers: this.buildAuthHeaders(),
         },

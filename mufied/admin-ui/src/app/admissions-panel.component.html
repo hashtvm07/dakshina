@@ -1,0 +1,28 @@
+<div class="admissions-shell">
+  <div class="tabs-navigation">
+    <button
+      type="button"
+      class="tab-button"
+      [class.active]="activeTab() === 'applications'"
+      (click)="showTab('applications')"
+    >
+      Applications
+    </button>
+    <button
+      type="button"
+      class="tab-button"
+      [class.active]="activeTab() === 'admissions'"
+      (click)="showTab('admissions')"
+    >
+      Admissions
+    </button>
+  </div>
+
+  <div class="tabs-content">
+    @if (activeTab() === 'applications') {
+      <app-applications-management />
+    } @else {
+      <app-admissions-list />
+    }
+  </div>
+</div>

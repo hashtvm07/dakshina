@@ -14,8 +14,14 @@ export class AdmissionController {
 
   @UseGuards(AdminSessionGuard)
   @Get()
-  list() {
-    return this.admissionService.listAdmissions();
+  list(@Query('status') status?: 'application' | 'admitted') {
+    return this.admissionService.listAdmissions(status);
+  }
+
+  @UseGuards(AdminSessionGuard)
+  @Post(':applicationNo/admit')
+  admit(@Param('applicationNo') applicationNo: string) {
+    return this.admissionService.admitStudent(applicationNo);
   }
 
   @UseGuards(AdminSessionGuard)

@@ -150,4 +150,12 @@ export class CreateAdmissionDto {
   @IsOptional()
   @IsString()
   resultMark?: string;
+
+  @IsOptional()
+  @IsIn(['application', 'admitted'])
+  status?: 'application' | 'admitted';
+
+  @IsOptional()
+  @IsString()
+  admissionNumber?: string;
 }

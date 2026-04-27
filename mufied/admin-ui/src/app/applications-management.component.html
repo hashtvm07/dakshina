@@ -1,0 +1,56 @@
+<div class="applications-container">
+  @if (message()) {
+    <div class="message-box" [class.error]="message().toLowerCase().includes('unable')">
+      {{ message() }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading">Loading applications...</div>
+  } @else if (applications().length === 0) {
+    <div class="no-data">No applications found.</div>
+  } @else {
+    <div class="table-wrapper">
+      <table class="applications-table">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Program</th>
+            <th>Application No</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>State</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (app of applications(); track app.applicationNo) {
+            <tr>
+              <td>{{ app.studentName }}</td>
+              <td class="admission-for">{{ app.admissionFor }}</td>
+              <td class="mono">{{ app.applicationNo }}</td>
+              <td class="email-cell">{{ app.email }}</td>
+              <td>{{ app.mobileNumber }}</td>
+              <td>{{ app.state }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn-admit"
+                  (click)="admitStudent(app.applicationNo)"
+                  [disabled]="admitting()"
+                  title="Move this student to Admissions and generate admission number"
+                >
+                  @if (admitting()) {
+                    Admitting...
+                  } @else {
+                    Admit
+                  }
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

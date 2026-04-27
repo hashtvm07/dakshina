@@ -32,12 +32,17 @@
     <button type="button" class="nav-pill" [class.active]="activePanel() === 'users'" (click)="showPanel('users')">
       User Management
     </button>
+    <button type="button" class="nav-pill" [class.active]="activePanel() === 'admissions'" (click)="showPanel('admissions')">
+      Admissions
+    </button>
     <button type="button" class="nav-pill nav-pill-warn" (click)="logout()">Logout</button>
   </nav>
 
   @if (activePanel() === 'content') {
     <app-home-content-editor />
-  } @else {
+  } @else if (activePanel() === 'users') {
     <app-user-management />
+  } @else {
+    <app-admissions-panel />
   }
 </div>
