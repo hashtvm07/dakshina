@@ -18,6 +18,14 @@ type EditorSection = {
   caption: string;
 };
 
+type ConfirmDialogState = {
+  title: string;
+  message: string;
+  confirmLabel: string;
+  cancelLabel: string;
+  tone: 'danger' | 'default';
+};
+
 const SECTIONS: EditorSection[] = [
   { id: 'hero', label: 'Hero', caption: 'Top banner, actions, badge, and float cards' },
   { id: 'intro', label: 'Intro', caption: 'Image, article2 sections, and stat strip' },
@@ -126,11 +134,13 @@ export class HomeContentEditorComponent {
   protected readonly documentFileErrors = signal<Record<number, string>>({});
   protected readonly selectedEventImageFiles = signal<Record<number, string>>({});
   protected readonly selectedEventPdfFiles = signal<Record<string, string>>({});
+  protected readonly confirmDialog = signal<ConfirmDialogState | null>(null);
   private readonly pendingDocumentFiles = new Map<number, File>();
   private readonly pendingEventImageFiles = new Map<number, File>();
   private readonly pendingEventPdfFiles = new Map<string, File>();
   private readonly savedContentJson = signal<string>('');
   private watermarkDataUrlPromise: Promise<string> | null = null;
+  private confirmDialogResolver: ((confirmed: boolean) => void) | null = null;
 
   protected readonly hasContent = computed(() => this.content() !== null);
   protected readonly hasUnsavedChanges = computed(() => {
@@ -331,9 +341,11 @@ export class HomeContentEditorComponent {
       return;
     }
 
-    const confirmed = window.confirm(
-      `Delete event "${event.title || `Event ${index + 1}`}"? This will remove it from the public UI.`,
-    );
+    const confirmed = await this.requestConfirmation({
+      title: 'Delete event',
+      message: `Delete event "${event.title || `Event ${index + 1}`}"? This will remove it from the public UI.`,
+      confirmLabel: 'Delete Event',
+    });
     if (!confirmed) {
       return;
     }
@@ -994,9 +1006,11 @@ export class HomeContentEditorComponent {
       return;
     }
 
-    const confirmed = window.confirm(
-      `Delete admission ${item.applicationNo} for ${item.studentName}? This cannot be undone.`,
-    );
+    const confirmed = await this.requestConfirmation({
+      title: 'Delete admission',
+      message: `Delete admission ${item.applicationNo} for ${item.studentName}? This cannot be undone.`,
+      confirmLabel: 'Delete Admission',
+    });
     if (!confirmed) {
       return;
     }
@@ -1184,6 +1198,31 @@ export class HomeContentEditorComponent {
         card.ctaLabel?.trim() ||
         this.selectedDocumentFileName(index),
     );
+  }
+
+  protected closeConfirmDialog(confirmed: boolean) {
+    this.confirmDialog.set(null);
+    this.confirmDialogResolver?.(confirmed);
+    this.confirmDialogResolver = null;
+  }
+
+  private requestConfirmation(
+    options: Pick<ConfirmDialogState, 'title' | 'message' | 'confirmLabel'> &
+      Partial<Pick<ConfirmDialogState, 'cancelLabel' | 'tone'>>,
+  ) {
+    this.confirmDialogResolver?.(false);
+
+    this.confirmDialog.set({
+      title: options.title,
+      message: options.message,
+      confirmLabel: options.confirmLabel,
+      cancelLabel: options.cancelLabel ?? 'Cancel',
+      tone: options.tone ?? 'danger',
+    });
+
+    return new Promise<boolean>((resolve) => {
+      this.confirmDialogResolver = resolve;
+    });
   }
 
   private buildAdmissionsWorkbook(items: ManagedAdmission[]) {

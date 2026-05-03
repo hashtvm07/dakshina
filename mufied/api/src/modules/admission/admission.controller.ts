@@ -25,6 +25,12 @@ export class AdmissionController {
   }
 
   @UseGuards(AdminSessionGuard)
+  @Put(':applicationNo/admit')
+  admitWithPut(@Param('applicationNo') applicationNo: string) {
+    return this.admissionService.admitStudent(applicationNo);
+  }
+
+  @UseGuards(AdminSessionGuard)
   @Put(':applicationNo')
   update(
     @Param('applicationNo') applicationNo: string,

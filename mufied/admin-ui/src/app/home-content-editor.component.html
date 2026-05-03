@@ -966,4 +966,24 @@
       </div>
     </section>
   }
+
+  @if (confirmDialog(); as dialog) {
+    <div class="modal-backdrop confirmation-backdrop" (click)="closeConfirmDialog(false)"></div>
+    <section class="confirmation-dialog panel" role="dialog" aria-modal="true" aria-labelledby="confirmation-title">
+      <div class="confirmation-icon" [class.confirmation-icon-danger]="dialog.tone === 'danger'">!</div>
+      <div>
+        <p class="eyebrow">Please Confirm</p>
+        <h2 id="confirmation-title">{{ dialog.title }}</h2>
+        <p>{{ dialog.message }}</p>
+      </div>
+      <div class="confirmation-actions">
+        <button class="btn btn-ghost" type="button" (click)="closeConfirmDialog(false)">
+          {{ dialog.cancelLabel }}
+        </button>
+        <button class="btn confirmation-confirm" type="button" (click)="closeConfirmDialog(true)">
+          {{ dialog.confirmLabel }}
+        </button>
+      </div>
+    </section>
+  }
 </div>

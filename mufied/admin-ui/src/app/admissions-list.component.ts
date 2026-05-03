@@ -22,8 +22,11 @@ export class AdmissionsListComponent {
     this.message.set('');
     try {
       const response = await this.adminService.getAdmittedStudents();
-      this.admissions.set(response.items);
-      this.message.set(`Loaded ${response.total} admitted student(s).`);
+      const admittedItems = response.items.filter(
+        (item) => item.status === 'admitted' && Boolean(item.admissionNumber),
+      );
+      this.admissions.set(admittedItems);
+      this.message.set(`Loaded ${admittedItems.length} admitted student(s).`);
     } catch (error) {
       this.message.set(this.formatError(error, 'Unable to load admissions.'));
     } finally {

@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { HomeContentAdminService, ManagedAdmission } from './home-content-admin.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { HomeContentAdminService, ManagedAdmission } from './home-content-admin.
 export class ApplicationsManagementComponent {
   protected readonly applications = signal<ManagedAdmission[]>([]);
   protected readonly loading = signal(true);
-  protected readonly admitting = signal(false);
+  protected readonly admittingApplicationNo = signal('');
   protected readonly message = signal('');
 
   constructor(private readonly adminService: HomeContentAdminService) {
@@ -23,8 +24,11 @@ export class ApplicationsManagementComponent {
     this.message.set('');
     try {
       const response = await this.adminService.getApplications();
-      this.applications.set(response.items);
-      this.message.set(`Loaded ${response.total} application(s).`);
+      const applicationItems = response.items.filter(
+        (item) => item.status === 'application' || (!item.status && !item.admissionNumber),
+      );
+      this.applications.set(applicationItems);
+      this.message.set(`Loaded ${applicationItems.length} application(s).`);
     } catch (error) {
       this.message.set(this.formatError(error, 'Unable to load applications.'));
     } finally {
@@ -32,20 +36,23 @@ export class ApplicationsManagementComponent {
     }
   }
 
-  protected async admitStudent(applicationNo: string) {
-    if (this.admitting()) return;
+  protected async admitStudent(application: ManagedAdmission) {
+    const applicationNo = application.applicationNo;
 
-    this.admitting.set(true);
+    if (this.admittingApplicationNo()) {
+      return;
+    }
+
+    this.admittingApplicationNo.set(applicationNo);
+    this.message.set(`Admitting ${applicationNo}...`);
     try {
-      const response = await this.adminService.admitStudent(undefined, applicationNo);
-      this.applications.update((apps) =>
-        apps.filter((app) => app.applicationNo !== applicationNo),
-      );
+      const response = await this.adminService.admitStudent(undefined, application);
+      await this.loadApplications();
       this.message.set(response.message);
     } catch (error) {
       this.message.set(this.formatError(error, 'Unable to admit student.'));
     } finally {
-      this.admitting.set(false);
+      this.admittingApplicationNo.set('');
     }
   }
 
@@ -56,6 +63,12 @@ export class ApplicationsManagementComponent {
   }
 
   private formatError(error: unknown, fallback: string) {
+    if (error instanceof HttpErrorResponse) {
+      const message = error.error?.message;
+      const detail = Array.isArray(message) ? message.join(' | ') : message;
+      return detail || `${fallback} (${error.status} ${error.statusText})`;
+    }
+
     if (typeof error === 'object' && error !== null && 'error' in error) {
       const errorPayload = (error as { error?: { message?: string | string[] } }).error;
       if (Array.isArray(errorPayload?.message)) {

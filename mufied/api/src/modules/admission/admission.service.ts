@@ -17,6 +17,7 @@ const DEFAULT_EXAM_DATE = '2026-04-11';
 const APPLICATION_PREFIX = 'MUFIED';
 const HOME_CONTENT_DB_PATH = 'content/home';
 const DEFAULT_AUTHORITY_EMAIL = 'admissions@mufied.in';
+const ADMISSION_NUMBER_SEQUENCE_PATH = 'meta/admissionNumberSequence';
 @Injectable()
 export class AdmissionService {
   constructor(
@@ -118,8 +119,10 @@ export class AdmissionService {
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
 
-    if (status) {
-      items = items.filter((item) => item.status === status);
+    if (status === 'admitted') {
+      items = items.filter((item) => item.status === 'admitted' && Boolean(item.admissionNumber));
+    } else if (status === 'application') {
+      items = items.filter((item) => item.status === 'application' || (!item.status && !item.admissionNumber));
     }
 
     return {
@@ -238,7 +241,7 @@ export class AdmissionService {
     );
 
     return {
-      message: 'Student admitted successfully.',
+      message: `Student admitted successfully. Admission No: ${admissionNumber}`,
       item: updated,
     };
   }
@@ -256,7 +259,7 @@ export class AdmissionService {
     const institutionCode = '01';
 
     // Get next serial number for this course-year combination
-    const serialPath = `meta/admissionSequence/${courseCode}/${year}`;
+    const serialPath = `${ADMISSION_NUMBER_SEQUENCE_PATH}/${courseCode}/${year}`;
     const serialNumber = await this.firebase.nextSequence(serialPath);
     const paddedSerial = String(serialNumber).padStart(4, '0');
 

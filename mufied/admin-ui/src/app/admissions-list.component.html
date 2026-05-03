@@ -18,6 +18,8 @@
             <th>Student Name</th>
             <th>Program</th>
             <th>Application No</th>
+            <th>Subject</th>
+            <th>Marks</th>
             <th>Email</th>
             <th>Mobile</th>
             <th>State</th>
@@ -32,6 +34,8 @@
               <td class="student-name">{{ admission.studentName }}</td>
               <td class="program">{{ admission.admissionFor }}</td>
               <td class="mono">{{ admission.applicationNo }}</td>
+              <td>{{ admission.resultSubject || '-' }}</td>
+              <td class="marks-cell">{{ admission.resultMark || '-' }}</td>
               <td class="email-cell">{{ admission.email }}</td>
               <td>{{ admission.mobileNumber }}</td>
               <td>{{ admission.state }}</td>

@@ -17,6 +17,9 @@
             <th>Student Name</th>
             <th>Program</th>
             <th>Application No</th>
+            <th>Subject</th>
+            <th>Marks</th>
+            <th>Status</th>
             <th>Email</th>
             <th>Mobile</th>
             <th>State</th>
@@ -29,6 +32,11 @@
               <td>{{ app.studentName }}</td>
               <td class="admission-for">{{ app.admissionFor }}</td>
               <td class="mono">{{ app.applicationNo }}</td>
+              <td>{{ app.resultSubject || '-' }}</td>
+              <td class="marks-cell">{{ app.resultMark || '-' }}</td>
+              <td>
+                <span class="status-badge">{{ app.status || 'application' }}</span>
+              </td>
               <td class="email-cell">{{ app.email }}</td>
               <td>{{ app.mobileNumber }}</td>
               <td>{{ app.state }}</td>
@@ -36,11 +44,11 @@
                 <button
                   type="button"
                   class="btn-admit"
-                  (click)="admitStudent(app.applicationNo)"
-                  [disabled]="admitting()"
+                  (click)="admitStudent(app)"
+                  [disabled]="!!admittingApplicationNo()"
                   title="Move this student to Admissions and generate admission number"
                 >
-                  @if (admitting()) {
+                  @if (admittingApplicationNo() === app.applicationNo) {
                     Admitting...
                   } @else {
                     Admit
