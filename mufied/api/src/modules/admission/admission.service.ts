@@ -10,6 +10,14 @@ type AdmissionDocument = CreateAdmissionDto & {
   createdAt: string;
   status: 'application' | 'admitted';
   admissionNumber?: string;
+  admittedAt?: string;
+  admittedClass?: string;
+  college?: string;
+};
+
+type ResetAdmissionNumberEntry = {
+  applicationNo: string;
+  admissionNumber: string;
 };
 
 const DEFAULT_EXAM_CENTER_VENUE = 'Mannaniyya Umarul Farooq Academy Kilikolloor, Kollam';
@@ -120,7 +128,7 @@ export class AdmissionService {
     );
 
     if (status === 'admitted') {
-      items = items.filter((item) => item.status === 'admitted' && Boolean(item.admissionNumber));
+      items = items.filter((item) => this.isAdmittedAdmission(item));
     } else if (status === 'application') {
       items = items.filter((item) => item.status === 'application' || (!item.status && !item.admissionNumber));
     }
@@ -216,7 +224,38 @@ export class AdmissionService {
     };
   }
 
-  async admitStudent(applicationNo: string) {
+  async returnToApplication(applicationNo: string) {
+    const existing = await this.firebase.get<AdmissionDocument>(`admissions/${applicationNo}`);
+
+    if (!existing) {
+      throw new NotFoundException(`Admission ${applicationNo} not found.`);
+    }
+
+    const {
+      admissionNumber: _admissionNumber,
+      admittedAt: _admittedAt,
+      admittedClass: _admittedClass,
+      college: _college,
+      ...rest
+    } = existing;
+
+    const updated: AdmissionDocument = {
+      ...rest,
+      status: 'application',
+    };
+
+    await this.firebase.set(
+      `admissions/${applicationNo}`,
+      updated as unknown as Record<string, unknown>,
+    );
+
+    return {
+      message: 'Admission moved back to applications.',
+      item: updated,
+    };
+  }
+
+  async admitStudent(applicationNo: string, admissionDetails?: { admittedClass?: string; college?: string }) {
     const existing = await this.firebase.get<AdmissionDocument>(`admissions/${applicationNo}`);
 
     if (!existing) {
@@ -227,12 +266,19 @@ export class AdmissionService {
       throw new BadRequestException('This student has already been admitted.');
     }
 
-    const admissionNumber = await this.generateAdmissionNumber(existing.admissionFor);
+    const admittedClass = admissionDetails?.admittedClass?.trim() || existing.admissionFor;
+    const college = admissionDetails?.college?.trim() || existing.college || existing.examCenterVenue;
+    const admissionNumber = await this.generateAdmissionNumber(admittedClass);
 
     const updated: AdmissionDocument = {
       ...existing,
+      admissionFor: admittedClass,
+      examCenterVenue: college,
       status: 'admitted',
       admissionNumber,
+      admittedAt: new Date().toISOString(),
+      admittedClass,
+      college,
     };
 
     await this.firebase.set(
@@ -246,25 +292,87 @@ export class AdmissionService {
     };
   }
 
+  async resetAdmissionNumbers() {
+    const admissions = await this.firebase.list<AdmissionDocument>('admissions');
+    const admittedItems = Object.values(admissions)
+      .filter((item) => this.isAdmittedAdmission(item))
+      .sort((a, b) => {
+        const firstDate = new Date(a.admittedAt || a.createdAt).getTime();
+        const secondDate = new Date(b.admittedAt || b.createdAt).getTime();
+        return firstDate - secondDate || a.applicationNo.localeCompare(b.applicationNo);
+      });
+
+    const sequenceCounts: Record<string, number> = {};
+    const updatedItems: ResetAdmissionNumberEntry[] = [];
+    const year = new Date().getFullYear();
+    const institutionCode = '01';
+
+    for (const item of admittedItems) {
+      const courseCode = this.resolveAdmissionCourseCode(item.admittedClass || item.admissionFor);
+      const sequenceKey = `${courseCode}/${year}`;
+      const serialNumber = (sequenceCounts[sequenceKey] ?? 0) + 1;
+      sequenceCounts[sequenceKey] = serialNumber;
+
+      const admissionNumber = `${courseCode}${year}${institutionCode}${String(serialNumber).padStart(4, '0')}`;
+      const updated: AdmissionDocument = {
+        ...item,
+        status: 'admitted',
+        admissionNumber,
+      };
+
+      await this.firebase.set(
+        `admissions/${item.applicationNo}`,
+        updated as unknown as Record<string, unknown>,
+      );
+      updatedItems.push({
+        applicationNo: item.applicationNo,
+        admissionNumber,
+      });
+    }
+
+    await this.firebase.remove(ADMISSION_NUMBER_SEQUENCE_PATH);
+
+    for (const [sequenceKey, count] of Object.entries(sequenceCounts)) {
+      await this.firebase.set(`${ADMISSION_NUMBER_SEQUENCE_PATH}/${sequenceKey}`, count);
+    }
+
+    return {
+      message: `Admission numbers reset from starting number for ${updatedItems.length} admitted student(s).`,
+      items: updatedItems,
+      total: updatedItems.length,
+    };
+  }
+
   private async generateAdmissionNumber(admissionFor: string): Promise<string> {
-    // Map admission program to course code
+    const courseCode = this.resolveAdmissionCourseCode(admissionFor);
+    const year = new Date().getFullYear();
+    const institutionCode = '01';
+    const prefix = `${courseCode}${year}${institutionCode}`;
+    const admissions = await this.firebase.list<AdmissionDocument>('admissions');
+    const latestSerial = Object.values(admissions)
+      .filter((item) => this.isAdmittedAdmission(item))
+      .map((item) => item.admissionNumber || '')
+      .filter((admissionNumber) => admissionNumber.startsWith(prefix))
+      .map((admissionNumber) => Number(admissionNumber.slice(-4)))
+      .filter((serial) => Number.isFinite(serial))
+      .reduce((highest, serial) => Math.max(highest, serial), 0);
+    const paddedSerial = String(latestSerial + 1).padStart(4, '0');
+
+    return `${prefix}${paddedSerial}`;
+  }
+
+  private resolveAdmissionCourseCode(admissionFor: string) {
     const courseCodeMap: Record<string, string> = {
       'Foundation course Class 4-7 (HIFZ)': '101',
       'Secondary (8-10)': '201',
       'Higher Secondary': '301',
     };
 
-    const courseCode = courseCodeMap[admissionFor] || '201';
-    const year = new Date().getFullYear();
-    const institutionCode = '01';
+    return courseCodeMap[admissionFor] || '201';
+  }
 
-    // Get next serial number for this course-year combination
-    const serialPath = `${ADMISSION_NUMBER_SEQUENCE_PATH}/${courseCode}/${year}`;
-    const serialNumber = await this.firebase.nextSequence(serialPath);
-    const paddedSerial = String(serialNumber).padStart(4, '0');
-
-    const admissionNumber = `${courseCode}${year}${institutionCode}${paddedSerial}`;
-    return admissionNumber;
+  private isAdmittedAdmission(item: AdmissionDocument) {
+    return item.status === 'admitted' || Boolean(item.admissionNumber);
   }
 
   private async getAuthorityEmail() {

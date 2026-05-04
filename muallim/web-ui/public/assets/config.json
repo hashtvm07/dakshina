@@ -1,8 +1,14 @@
 {
-  "apiBaseUrl": "http://localhost:3000",
+  "apiBaseUrl": "",
   "endpoints": {
+    "siteSettings": "/api/site/settings",
     "sitePublic": "/api/site/public",
+    "contentBlocks": "/api/site/content-blocks",
+    "mediaAssets": "/api/site/media-assets",
     "muallimRegister": "/api/muallims/register",
+    "users": "/api/users",
+    "userMeta": "/api/users/meta",
+    "colleges": "/api/colleges",
     "vacancies": "/api/vacancies"
   }
 }

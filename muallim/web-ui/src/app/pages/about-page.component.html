@@ -1,0 +1,15 @@
+<section class="page-card" *ngIf="siteFacade.sitePayload$ | async as site">
+  <div class="page-intro">
+    <span>About Us</span>
+    <h1>{{ site.settings.aboutTitle }}</h1>
+    <p>{{ site.settings.aboutBody }}</p>
+  </div>
+
+  <div class="about-grid">
+    <article *ngFor="let block of site.blocks">
+      <img *ngIf="block.imageUrl" [src]="block.imageUrl" [alt]="block.title" />
+      <h2>{{ block.title }}</h2>
+      <p>{{ block.body }}</p>
+    </article>
+  </div>
+</section>

@@ -5,7 +5,8 @@ export const MENU_OPTIONS = [
   { key: 'users', label: 'User Management', route: '/users' },
   { key: 'colleges', label: 'Colleges', route: '/colleges' },
   { key: 'vacancies', label: 'Vacancies', route: '/vacancies' },
-  { key: 'registrations', label: 'Muallim Registrations', route: '/registrations' },
+  { key: 'applications', label: 'Applications', route: '/applications' },
+  { key: 'admissions', label: 'Admissions', route: '/admissions' },
 ] as const;
 
 export type MenuKey = (typeof MENU_OPTIONS)[number]['key'];

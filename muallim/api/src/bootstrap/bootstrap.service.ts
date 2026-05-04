@@ -1,4 +1,5 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserType } from '../common/enums/user-type.enum';
@@ -10,7 +11,10 @@ import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class BootstrapService implements OnApplicationBootstrap {
+  private readonly logger = new Logger(BootstrapService.name);
+
   constructor(
+    private readonly configService: ConfigService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(SiteSettings)
@@ -22,23 +26,49 @@ export class BootstrapService implements OnApplicationBootstrap {
   ) {}
 
   async onApplicationBootstrap() {
-    await this.seedSuperAdmin();
-    await this.seedSiteSettings();
-    await this.seedLandingContent();
+    const shouldSeed = this.configService.get<string>('DB_SEED', 'true') === 'true';
+
+    if (!shouldSeed) {
+      this.logger.log('Skipping bootstrap seed because DB_SEED=false');
+      return;
+    }
+
+    try {
+      await this.seedSuperAdmin();
+      await this.seedSiteSettings();
+      await this.seedLandingContent();
+      this.logger.log('Bootstrap seed completed');
+    } catch (error) {
+      const shouldFail =
+        this.configService.get<string>('BOOTSTRAP_FAIL_FAST', 'false') === 'true';
+      const message = error instanceof Error ? error.stack ?? error.message : String(error);
+
+      this.logger.error(`Bootstrap seed failed: ${message}`);
+
+      if (shouldFail) {
+        throw error;
+      }
+    }
   }
 
   private async seedSuperAdmin() {
     const existing = await this.userRepository.findOne({
-      where: { userType: UserType.SUPERADMIN },
+      where: { username: 'superadmin' },
       select: ['id', 'userType', 'password'],
     });
 
     if (existing) {
-      if (!existing.password) {
-        await this.userRepository.update(existing.id, {
-          password: 'StrongPass123',
-        });
-      }
+      await this.userRepository.update(existing.id, {
+        name: 'System Super Admin',
+        username: 'superadmin',
+        email: 'superadmin@muallim.local',
+        phone: '0000000000',
+        address: 'System generated account',
+        password: 'StrongPass123',
+        userType: UserType.SUPERADMIN,
+        allowedMenus: getDefaultMenusForUserType(UserType.SUPERADMIN),
+        isActive: true,
+      });
       return;
     }
 
@@ -62,6 +92,10 @@ export class BootstrapService implements OnApplicationBootstrap {
     });
 
     if (existing) {
+      await this.siteSettingsRepository.update(existing.id, {
+        heroImageUrl: '/web-ui/assets/images/landing/boys-reading-quran-mosque.jpg',
+        bannerImageUrl: '/web-ui/assets/images/landing/beautiful-masjid-school.jpg',
+      });
       return;
     }
 
@@ -73,10 +107,8 @@ export class BootstrapService implements OnApplicationBootstrap {
         heroSubtitle: 'Green, clean, and mobile-first for the Dakshina Muallim network.',
         heroDescription:
           'Manage public content, publish vacancies, and onboard Muallim profiles from one structured platform.',
-        heroImageUrl:
-          'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80',
-        bannerImageUrl:
-          'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=1200&q=80',
+        heroImageUrl: '/web-ui/assets/images/landing/boys-reading-quran-mosque.jpg',
+        bannerImageUrl: '/web-ui/assets/images/landing/beautiful-masjid-school.jpg',
         aboutTitle: 'Professional portal for registration, discovery, and vacancy management',
         aboutBody:
           'The portal combines a polished public experience with an operational admin dashboard for colleges, vacancies, and user permissions.',
@@ -90,53 +122,63 @@ export class BootstrapService implements OnApplicationBootstrap {
       this.mediaAssetRepository.count(),
     ]);
 
+    const defaultBlocks = [
+      this.contentBlockRepository.create({
+        title: 'Structured Registration',
+        body: 'Capture mandatory Muallim details with a clean public workflow and automatic user creation.',
+        sortOrder: 1,
+        imageUrl: '/web-ui/assets/images/landing/boy-white-thobe-quran.jpg',
+      }),
+      this.contentBlockRepository.create({
+        title: 'Role-aware Administration',
+        body: 'Superadmin can assign menu visibility and operational pages for each admin account.',
+        sortOrder: 2,
+        imageUrl: '/web-ui/assets/images/landing/children-studying-mosque.jpg',
+      }),
+      this.contentBlockRepository.create({
+        title: 'Vacancy Publishing',
+        body: 'Maintain colleges and publish live Muallim vacancies with searchable public access.',
+        sortOrder: 3,
+        imageUrl: '/web-ui/assets/images/landing/masjid-architecture-campus.jpg',
+      }),
+    ];
+
     if (!blockCount) {
-      await this.contentBlockRepository.save([
-        this.contentBlockRepository.create({
-          title: 'Structured Registration',
-          body: 'Capture mandatory Muallim details with a clean public workflow and automatic user creation.',
-          sortOrder: 1,
-          imageUrl:
-            'https://images.unsplash.com/photo-1513258496099-48168024aec0?auto=format&fit=crop&w=900&q=80',
-        }),
-        this.contentBlockRepository.create({
-          title: 'Role-aware Administration',
-          body: 'Superadmin can assign menu visibility and operational pages for each admin account.',
-          sortOrder: 2,
-          imageUrl:
-            'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80',
-        }),
-        this.contentBlockRepository.create({
-          title: 'Vacancy Publishing',
-          body: 'Maintain colleges and publish live Muallim vacancies with searchable public access.',
-          sortOrder: 3,
-          imageUrl:
-            'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=900&q=80',
-        }),
-      ]);
+      await this.contentBlockRepository.save(defaultBlocks);
+    } else {
+      await Promise.all(
+        defaultBlocks.map((block) =>
+          this.contentBlockRepository.update({ title: block.title }, { imageUrl: block.imageUrl }),
+        ),
+      );
     }
 
+    const defaultMediaAssets = [
+      this.mediaAssetRepository.create({
+        title: 'Campus coordination',
+        category: 'gallery',
+        imageUrl: '/web-ui/assets/images/landing/beautiful-masjid-school.jpg',
+      }),
+      this.mediaAssetRepository.create({
+        title: 'Student guidance',
+        category: 'gallery',
+        imageUrl: '/web-ui/assets/images/landing/boys-studying-globe.jpg',
+      }),
+      this.mediaAssetRepository.create({
+        title: 'Learning environment',
+        category: 'banner',
+        imageUrl: '/web-ui/assets/images/landing/1.jpg',
+      }),
+    ];
+
     if (!mediaCount) {
-      await this.mediaAssetRepository.save([
-        this.mediaAssetRepository.create({
-          title: 'Campus coordination',
-          category: 'gallery',
-          imageUrl:
-            'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80',
-        }),
-        this.mediaAssetRepository.create({
-          title: 'Student guidance',
-          category: 'gallery',
-          imageUrl:
-            'https://images.unsplash.com/photo-1529390079861-591de354faf5?auto=format&fit=crop&w=900&q=80',
-        }),
-        this.mediaAssetRepository.create({
-          title: 'Learning environment',
-          category: 'banner',
-          imageUrl:
-            'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=900&q=80',
-        }),
-      ]);
+      await this.mediaAssetRepository.save(defaultMediaAssets);
+    } else {
+      await Promise.all(
+        defaultMediaAssets.map((asset) =>
+          this.mediaAssetRepository.update({ title: asset.title }, { imageUrl: asset.imageUrl }),
+        ),
+      );
     }
   }
 }

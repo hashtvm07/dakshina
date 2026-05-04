@@ -57,6 +57,9 @@ export type ManagedAdmission = {
   resultMark?: string;
   status: 'application' | 'admitted';
   admissionNumber?: string;
+  admittedAt?: string;
+  admittedClass?: string;
+  college?: string;
 };
 
 export type ManagedUser = {
@@ -253,14 +256,62 @@ export class HomeContentAdminService {
   async deleteAdmission(baseUrlOverride: string | undefined, applicationNo: string) {
     const config = await this.getApiConfig();
     const baseUrl = (baseUrlOverride || config.baseUrl).replace(/\/$/, '');
+    const encodedApplicationNo = encodeURIComponent(applicationNo);
     return firstValueFrom(
       this.http.delete<{ message: string; applicationNo: string }>(
-        `${baseUrl}${config.endpoints.admissionsAdmin}/${applicationNo}`,
+        `${baseUrl}${config.endpoints.admissionsAdmin}/${encodedApplicationNo}`,
         {
           headers: this.buildAuthHeaders(),
         },
       ),
     );
+  }
+
+  async returnAdmissionToApplications(baseUrlOverride: string | undefined, applicationNo: string) {
+    const config = await this.getApiConfig();
+    const baseUrl = (baseUrlOverride || config.baseUrl).replace(/\/$/, '');
+    const encodedApplicationNo = encodeURIComponent(applicationNo);
+    const url = `${baseUrl}${config.endpoints.admissionsAdmin}/${encodedApplicationNo}/return-to-application`;
+
+    try {
+      return await firstValueFrom(
+        this.http.post<{ message: string; item: ManagedAdmission }>(
+          url,
+          {},
+          {
+            headers: this.buildAuthHeaders(),
+          },
+        ),
+      );
+    } catch (error) {
+      const status = this.getHttpStatus(error);
+
+      if (![404, 405].includes(status)) {
+        throw error;
+      }
+
+      const snapshot = await this.getAdmissions(baseUrl);
+      const admission = snapshot.items.find((item) => item.applicationNo === applicationNo);
+
+      if (!admission) {
+        throw error;
+      }
+
+      const fallbackPayload: ManagedAdmission = {
+        ...admission,
+        status: 'application',
+        admissionNumber: '',
+        admittedAt: '',
+        admittedClass: '',
+        college: '',
+      };
+      const response = await this.updateAdmission(baseUrl, applicationNo, fallbackPayload);
+
+      return {
+        message: 'Admission moved back to applications.',
+        item: response.item,
+      };
+    }
   }
 
   async getApplications(baseUrlOverride?: string) {
@@ -291,76 +342,72 @@ export class HomeContentAdminService {
     );
   }
 
-  async admitStudent(baseUrlOverride: string | undefined, application: ManagedAdmission) {
+  async resetAdmissionNumbers(baseUrlOverride?: string) {
     const config = await this.getApiConfig();
     const baseUrl = (baseUrlOverride || config.baseUrl).replace(/\/$/, '');
-    const applicationNo = application.applicationNo;
-    const encodedApplicationNo = encodeURIComponent(applicationNo);
-    const url = `${baseUrl}${config.endpoints.admissionsAdmin}/${encodedApplicationNo}/admit`;
-    const options = { headers: this.buildAuthHeaders() };
-
-    console.log('[Admit API] Request', {
-      method: 'POST',
-      url,
-      body: { applicationNo },
-    });
+    const url = `${baseUrl}${config.endpoints.admissionsAdmin}/reset-admission-numbers`;
 
     try {
-      const response = await firstValueFrom(
-        this.http.post<{ message: string; item: ManagedAdmission }>(url, { applicationNo }, options),
+      return await firstValueFrom(
+        this.http.post<{
+          message: string;
+          items: Array<{ applicationNo: string; admissionNumber: string }>;
+          total: number;
+        }>(
+          url,
+          {},
+          {
+            headers: this.buildAuthHeaders(),
+          },
+        ),
       );
-      console.log('[Admit API] Response', response);
-      return response;
     } catch (error) {
       const status = this.getHttpStatus(error);
-      if ([404, 405].includes(status)) {
-        console.warn('[Admit API] Dedicated admit endpoint unavailable; using update fallback.', {
-          status,
-          url,
-        });
-        return this.admitStudentWithUpdateFallback(baseUrl, config.endpoints.admissionsAdmin, application);
+
+      if (![404, 405].includes(status)) {
+        throw error;
       }
 
-      console.error('[Admit API] Error response', error);
-      throw error;
+      return this.resetAdmissionNumbersWithUpdateFallback(baseUrl);
     }
+  }
+
+  async admitStudent(
+    baseUrlOverride: string | undefined,
+    application: ManagedAdmission,
+    admissionDetails?: { admittedClass: string; college: string },
+  ) {
+    const config = await this.getApiConfig();
+    const baseUrl = (baseUrlOverride || config.baseUrl).replace(/\/$/, '');
+    return this.admitStudentWithUpdateFallback(baseUrl, config.endpoints.admissionsAdmin, application, admissionDetails);
   }
 
   private async admitStudentWithUpdateFallback(
     baseUrl: string,
     admissionsEndpoint: string,
     application: ManagedAdmission,
+    admissionDetails?: { admittedClass: string; college: string },
   ) {
-    const admittedSnapshotUrl = `${baseUrl}${admissionsEndpoint}?status=admitted`;
-    console.log('[Admit API fallback] Request', {
-      method: 'GET',
-      url: admittedSnapshotUrl,
-    });
-
-    const admittedSnapshot = await firstValueFrom(
-      this.http.get<{
-        items: ManagedAdmission[];
-        total: number;
-        updatedAt: string;
-      }>(admittedSnapshotUrl, {
-        headers: this.buildAuthHeaders(),
-      }),
+    const admittedSnapshot = await this.getAdmissions(baseUrl);
+    const admittedItems = admittedSnapshot.items.filter(
+      (item) => item.status === 'admitted' || Boolean(item.admissionNumber),
     );
-    console.log('[Admit API fallback] Response', admittedSnapshot);
 
-    const admissionNumber = this.generateAdmissionNumber(application, admittedSnapshot.items);
+    const admittedClass = admissionDetails?.admittedClass || application.admissionFor;
+    const college = admissionDetails?.college || application.college || application.examCenterVenue;
+    const admissionNumber = this.generateAdmissionNumber({ ...application, admissionFor: admittedClass }, admittedItems);
     const updatedAdmission: ManagedAdmission = {
       ...application,
+      admissionFor: admittedClass,
+      examCenterVenue: college,
       status: 'admitted',
       admissionNumber,
+      admittedAt: new Date().toISOString(),
+      admittedClass,
+      college,
     };
     const encodedApplicationNo = encodeURIComponent(application.applicationNo);
     const updateUrl = `${baseUrl}${admissionsEndpoint}/${encodedApplicationNo}`;
-    console.log('[Admit API fallback] Request', {
-      method: 'PUT',
-      url: updateUrl,
-      body: updatedAdmission,
-    });
 
     const response = await firstValueFrom(
       this.http.put<{ message: string; item: ManagedAdmission }>(
@@ -371,7 +418,6 @@ export class HomeContentAdminService {
         },
       ),
     );
-    console.log('[Admit API fallback] Response', response);
 
     return {
       message: `Student admitted successfully. Admission No: ${response.item.admissionNumber || admissionNumber}`,
@@ -398,6 +444,55 @@ export class HomeContentAdminService {
     const serial = String(latestSerial + 1).padStart(4, '0');
 
     return `${prefix}${serial}`;
+  }
+
+  private async resetAdmissionNumbersWithUpdateFallback(baseUrl: string) {
+    const snapshot = await this.getAdmissions(baseUrl);
+    const admittedItems = snapshot.items
+      .filter((item) => item.status === 'admitted' || Boolean(item.admissionNumber))
+      .sort((a, b) => {
+        const firstDate = new Date(a.admittedAt || a.createdAt).getTime();
+        const secondDate = new Date(b.admittedAt || b.createdAt).getTime();
+        return firstDate - secondDate || a.applicationNo.localeCompare(b.applicationNo);
+      });
+    const sequenceCounts: Record<string, number> = {};
+    const updatedItems: Array<{ applicationNo: string; admissionNumber: string }> = [];
+    const year = new Date().getFullYear();
+    const institutionCode = '01';
+
+    for (const item of admittedItems) {
+      const courseCode = this.resolveAdmissionCourseCode(item.admittedClass || item.admissionFor);
+      const sequenceKey = `${courseCode}/${year}`;
+      const serialNumber = (sequenceCounts[sequenceKey] ?? 0) + 1;
+      sequenceCounts[sequenceKey] = serialNumber;
+
+      const admissionNumber = `${courseCode}${year}${institutionCode}${String(serialNumber).padStart(4, '0')}`;
+      await this.updateAdmission(baseUrl, item.applicationNo, {
+        ...item,
+        status: 'admitted',
+        admissionNumber,
+      });
+      updatedItems.push({
+        applicationNo: item.applicationNo,
+        admissionNumber,
+      });
+    }
+
+    return {
+      message: `Admission numbers reset from starting number for ${updatedItems.length} admitted student(s). Deploy the updated API so future admissions continue after the reset sequence.`,
+      items: updatedItems,
+      total: updatedItems.length,
+    };
+  }
+
+  private resolveAdmissionCourseCode(admissionFor: string) {
+    const courseCodeMap: Record<string, string> = {
+      'Foundation course Class 4-7 (HIFZ)': '101',
+      'Secondary (8-10)': '201',
+      'Higher Secondary': '301',
+    };
+
+    return courseCodeMap[admissionFor] || '201';
   }
 
   private getHttpStatus(error: unknown) {

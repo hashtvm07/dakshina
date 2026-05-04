@@ -19,15 +19,39 @@ export class AdmissionController {
   }
 
   @UseGuards(AdminSessionGuard)
+  @Post('reset-admission-numbers')
+  resetAdmissionNumbers() {
+    return this.admissionService.resetAdmissionNumbers();
+  }
+
+  @UseGuards(AdminSessionGuard)
   @Post(':applicationNo/admit')
-  admit(@Param('applicationNo') applicationNo: string) {
-    return this.admissionService.admitStudent(applicationNo);
+  admit(
+    @Param('applicationNo') applicationNo: string,
+    @Body() body?: { admittedClass?: string; college?: string },
+  ) {
+    return this.admissionService.admitStudent(applicationNo, body);
   }
 
   @UseGuards(AdminSessionGuard)
   @Put(':applicationNo/admit')
-  admitWithPut(@Param('applicationNo') applicationNo: string) {
-    return this.admissionService.admitStudent(applicationNo);
+  admitWithPut(
+    @Param('applicationNo') applicationNo: string,
+    @Body() body?: { admittedClass?: string; college?: string },
+  ) {
+    return this.admissionService.admitStudent(applicationNo, body);
+  }
+
+  @UseGuards(AdminSessionGuard)
+  @Post(':applicationNo/return-to-application')
+  returnToApplication(@Param('applicationNo') applicationNo: string) {
+    return this.admissionService.returnToApplication(applicationNo);
+  }
+
+  @UseGuards(AdminSessionGuard)
+  @Put(':applicationNo/return-to-application')
+  returnToApplicationWithPut(@Param('applicationNo') applicationNo: string) {
+    return this.admissionService.returnToApplication(applicationNo);
   }
 
   @UseGuards(AdminSessionGuard)

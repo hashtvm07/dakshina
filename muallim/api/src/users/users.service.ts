@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MENU_OPTIONS } from '../common/constants/menu-options';
@@ -20,6 +20,10 @@ export class UsersService {
   }
 
   async createUser(dto: CreateUserDto) {
+    if (dto.userType === UserType.MUALLIM || dto.userType === UserType.SUPERADMIN) {
+      throw new UnauthorizedException('Only admin users can be created here.');
+    }
+
     const defaults = getDefaultMenusForUserType(dto.userType);
     const mergedMenus = Array.from(new Set([...(dto.allowedMenus ?? []), ...defaults]));
 
@@ -62,6 +66,7 @@ export class UsersService {
     email: string;
     phone: string;
     address: string;
+    password?: string;
   }) {
     const exists = await this.userRepository.findOne({ where: { muallimId: input.muallimId } });
     if (exists) {
@@ -79,8 +84,35 @@ export class UsersService {
 
   getUserMetadata() {
     return {
-      userTypes: Object.values(UserType),
+      userTypes: Object.values(UserType).filter(
+        (type) => type !== UserType.MUALLIM && type !== UserType.SUPERADMIN,
+      ),
       menuOptions: MENU_OPTIONS,
     };
+  }
+
+  async login(username: string, password: string) {
+    const user = await this.userRepository.findOne({
+      where: { username },
+      select: [
+        'id',
+        'name',
+        'username',
+        'email',
+        'phone',
+        'userType',
+        'allowedMenus',
+        'muallimId',
+        'isActive',
+        'password',
+      ],
+    });
+
+    if (!user || !user.isActive || user.password !== password) {
+      throw new UnauthorizedException('Invalid username or password');
+    }
+
+    const { password: _password, ...safeUser } = user;
+    return safeUser;
   }
 }

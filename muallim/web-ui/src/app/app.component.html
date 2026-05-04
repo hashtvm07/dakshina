@@ -1,44 +1,82 @@
-<div class="app-shell" *ngIf="siteFacade.sitePayload$ | async as site">
-  <header class="topbar">
-    <a class="brand" routerLink="/">
-      <span class="brand-mark">M</span>
-      <span class="brand-copy">
-        <strong>Muallim Portal</strong>
-        <small>Dakshina network</small>
-      </span>
-    </a>
+<router-outlet *ngIf="isAdminLoginPage" />
 
-    <nav class="nav-links">
-      <a
-        *ngFor="let item of navItems"
-        [routerLink]="item.path"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: item.path === '/' }"
-      >
+<div class="admin-shell" *ngIf="isAdminRoute && !isAdminLoginPage">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">M</span>
+      <div class="brand-text">
+        <strong>Muallim Admin</strong>
+        <small>Content and operations</small>
+      </div>
+    </div>
+
+    <nav>
+      <a *ngFor="let item of adminNavItems" [routerLink]="item.path" routerLinkActive="active">
         {{ item.label }}
       </a>
-      <a *ngIf="site.settings.registerEnabled" routerLink="/register" routerLinkActive="active">Register</a>
     </nav>
 
-    <form class="search-chip" (ngSubmit)="submitSearch()">
-      <input [(ngModel)]="searchId" name="searchId" placeholder="Search Muallim ID" />
-      <button type="submit">Find</button>
-    </form>
-  </header>
+    <div class="session-card" *ngIf="adminUser as currentUser">
+      <strong>{{ currentUser.name }}</strong>
+      <small>{{ currentUser.userType }}</small>
+      <button type="button" (click)="adminLogout()">Logout</button>
+    </div>
+  </aside>
 
-  <main>
+  <main class="workspace">
     <router-outlet />
   </main>
-
-  <footer class="footer">
-    <div>
-      <strong>Muallim Portal</strong>
-      <p>Registration, discovery, and vacancy publishing in one structured system.</p>
-    </div>
-    <div class="footer-links">
-      <a routerLink="/">Home</a>
-      <a routerLink="/vacancies">Vacancies</a>
-      <a *ngIf="site.settings.registerEnabled" routerLink="/register">Register</a>
-    </div>
-  </footer>
 </div>
+
+<ng-container *ngIf="!isAdminRoute">
+  <div class="app-shell" *ngIf="siteFacade.sitePayload$ | async as site">
+    <header class="topbar">
+      <a class="brand" routerLink="/">
+        <span class="brand-mark">M</span>
+        <span class="brand-copy">
+          <strong>Muallim Portal</strong>
+          <small>Dakshina network</small>
+        </span>
+      </a>
+
+      <nav class="nav-links">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+        <div class="nav-menu">
+          <button type="button">Services</button>
+          <div class="submenu">
+            <a *ngIf="site.settings.registerEnabled" routerLink="/register" routerLinkActive="active">Registration</a>
+            <a routerLink="/vacancies" routerLinkActive="active">Vacancies</a>
+          </div>
+        </div>
+        <a routerLink="/about-us" routerLinkActive="active">About Us</a>
+        <a routerLink="/search" routerLinkActive="active">Search</a>
+        <a routerLink="/admin/login" routerLinkActive="active">Login</a>
+        <a routerLink="/events" routerLinkActive="active">Events</a>
+        <a *ngIf="user && user.userType !== 'muallim'" routerLink="/admin/dashboard">Admin</a>
+        <a *ngIf="user?.userType === 'muallim' && user?.muallimId" [routerLink]="['/muallim', user?.muallimId]">My Profile</a>
+        <button *ngIf="user" type="button" class="link-button" (click)="logout()">Logout</button>
+      </nav>
+
+      <form class="search-chip" (ngSubmit)="submitSearch()">
+        <input [(ngModel)]="searchId" name="searchId" placeholder="Search Muallim ID" />
+        <button type="submit">Find</button>
+      </form>
+    </header>
+
+    <main>
+      <router-outlet />
+    </main>
+
+    <footer class="footer">
+      <div>
+        <strong>Muallim Portal</strong>
+        <p>Registration, discovery, and vacancy publishing in one structured system.</p>
+      </div>
+      <div class="footer-links">
+        <a routerLink="/">Home</a>
+        <a routerLink="/vacancies">Vacancies</a>
+        <a *ngIf="site.settings.registerEnabled" routerLink="/register">Register</a>
+      </div>
+    </footer>
+  </div>
+</ng-container>

@@ -158,4 +158,16 @@ export class CreateAdmissionDto {
   @IsOptional()
   @IsString()
   admissionNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  admittedAt?: string;
+
+  @IsOptional()
+  @IsString()
+  admittedClass?: string;
+
+  @IsOptional()
+  @IsString()
+  college?: string;
 }

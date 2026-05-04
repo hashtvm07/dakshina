@@ -1,0 +1,12 @@
+<section class="page-card">
+  <div class="page-intro">
+    <span>Search</span>
+    <h1>Find a Muallim profile</h1>
+    <p>Enter the Muallim public ID or admission number to open the profile page.</p>
+  </div>
+
+  <form class="search-panel" (ngSubmit)="submitSearch()">
+    <input [(ngModel)]="searchId" name="searchId" placeholder="Search Muallim ID" />
+    <button type="submit">Search</button>
+  </form>
+</section>

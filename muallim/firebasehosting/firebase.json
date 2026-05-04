@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "**",
+        "destination": "https://muallim-588393474325.asia-south1.run.app/web-ui",
+        "type": 302
+      }
+    ]
+  }
+}

@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LoginDto } from './dto/login.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
@@ -20,6 +21,11 @@ export class UsersController {
   @Post()
   createUser(@Body() dto: CreateUserDto) {
     return this.usersService.createUser(dto);
+  }
+
+  @Post('/login')
+  login(@Body() dto: LoginDto) {
+    return this.usersService.login(dto.username, dto.password);
   }
 
   @Put(':id')

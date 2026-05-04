@@ -13,7 +13,12 @@ export class RuntimeConfigService {
   private config?: RuntimeConfig;
 
   async load() {
-    this.config = await firstValueFrom(this.http.get<RuntimeConfig>('assets/config.json'));
+    const config = await firstValueFrom(this.http.get<RuntimeConfig>('assets/config.json'));
+    const apiBaseUrl = config.apiBaseUrl?.trim() || window.location.origin;
+    this.config = {
+      ...config,
+      apiBaseUrl: apiBaseUrl.replace(/\/$/, ''),
+    };
   }
 
   getConfig() {

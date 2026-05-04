@@ -44,15 +44,11 @@
                 <button
                   type="button"
                   class="btn-admit"
-                  (click)="admitStudent(app)"
+                  (click)="openAdmitDialog(app)"
                   [disabled]="!!admittingApplicationNo()"
                   title="Move this student to Admissions and generate admission number"
                 >
-                  @if (admittingApplicationNo() === app.applicationNo) {
-                    Admitting...
-                  } @else {
-                    Admit
-                  }
+                  Admit
                 </button>
               </td>
             </tr>
@@ -60,5 +56,47 @@
         </tbody>
       </table>
     </div>
+  }
+
+  @if (admissionDraft(); as draft) {
+    <div class="modal-backdrop" (click)="closeAdmitDialog()"></div>
+    <section class="admit-modal" role="dialog" aria-modal="true" aria-labelledby="admit-title">
+      <div class="modal-head">
+        <div>
+          <p class="modal-kicker">Admission</p>
+          <h2 id="admit-title">Admit {{ draft.studentName }}</h2>
+        </div>
+        <button type="button" class="modal-close" (click)="closeAdmitDialog()" aria-label="Close">x</button>
+      </div>
+
+      <div class="modal-body">
+        <fieldset class="class-options">
+          <legend>Select class</legend>
+          @for (option of classOptions; track option) {
+            <label class="radio-option">
+              <input type="radio" name="admittedClass" [value]="option" [(ngModel)]="selectedClass" />
+              <span>{{ option }}</span>
+            </label>
+          }
+        </fieldset>
+
+        <div class="college-box">
+          <span>College</span>
+          <strong>{{ college }}</strong>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="closeAdmitDialog()">Cancel</button>
+        <button
+          type="button"
+          class="btn-admit"
+          (click)="confirmAdmission()"
+          [disabled]="!!admittingApplicationNo()"
+        >
+          {{ admittingApplicationNo() === draft.applicationNo ? 'Admitting...' : 'Admit' }}
+        </button>
+      </div>
+    </section>
   }
 </div>

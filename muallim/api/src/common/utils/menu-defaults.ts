@@ -9,9 +9,9 @@ export function getDefaultMenusForUserType(userType: UserType): MenuKey[] {
       return [...allMenus];
     case UserType.OFFICE_ADMIN:
     case UserType.CENTRAL_ADMIN:
-      return ['dashboard', 'vacancies', 'colleges', 'registrations'];
+      return ['dashboard', 'vacancies', 'colleges', 'applications', 'admissions'];
     case UserType.MEKHALA_ADMIN:
-      return ['dashboard', 'registrations'];
+      return ['dashboard', 'applications', 'admissions'];
     case UserType.MUALLIM:
       return ['dashboard'];
     default:

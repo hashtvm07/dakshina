@@ -21,8 +21,47 @@
   grid-column: 1 / -1;
 }
 
+.profile-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(18, 91, 55, 0.14);
+}
+
+.profile-form h2,
+.profile-form p,
+.profile-form button {
+  grid-column: 1 / -1;
+}
+
+.profile-form label {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.profile-form input,
+.profile-form textarea,
+.profile-form button {
+  border-radius: 16px;
+  border: 1px solid rgba(18, 91, 55, 0.16);
+  padding: 0.9rem 1rem;
+  font: inherit;
+}
+
+.profile-form button {
+  background: linear-gradient(135deg, #0f6d3d, #57b27b);
+  color: #fff;
+  font-weight: 700;
+}
+
 @media (max-width: 720px) {
   .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-form {
     grid-template-columns: 1fr;
   }
 }

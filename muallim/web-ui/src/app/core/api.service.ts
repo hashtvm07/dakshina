@@ -16,9 +16,36 @@ export class ApiService {
     return this.http.post<T>(this.buildUrl(key), body);
   }
 
+  put<T>(key: string, body: unknown): Observable<T> {
+    return this.http.put<T>(this.buildUrl(key), body);
+  }
+
+  delete<T>(key: string): Observable<T> {
+    return this.http.delete<T>(this.buildUrl(key));
+  }
+
   getByPath<T>(path: string) {
     const config = this.runtimeConfig.getConfig();
     return this.http.get<T>(`${config.apiBaseUrl}${path}`);
+  }
+
+  byPath<T>(path: string) {
+    return this.getByPath<T>(path);
+  }
+
+  postByPath<T>(path: string, body: unknown): Observable<T> {
+    const config = this.runtimeConfig.getConfig();
+    return this.http.post<T>(`${config.apiBaseUrl}${path}`, body);
+  }
+
+  putByPath<T>(path: string, body: unknown): Observable<T> {
+    const config = this.runtimeConfig.getConfig();
+    return this.http.put<T>(`${config.apiBaseUrl}${path}`, body);
+  }
+
+  deleteByPath<T>(path: string): Observable<T> {
+    const config = this.runtimeConfig.getConfig();
+    return this.http.delete<T>(`${config.apiBaseUrl}${path}`);
   }
 
   private buildUrl(key: string) {

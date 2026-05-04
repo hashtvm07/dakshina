@@ -1,9 +1,9 @@
 <section class="page-card" *ngIf="siteFacade.sitePayload$ | async as site">
   <div class="page-intro">
     <span>Registration</span>
-    <h1>Register Muallim</h1>
+    <h1>Muallim Administrative Registration Form</h1>
     <p *ngIf="site.settings.registerEnabled; else disabledMessage">
-      Submit the required details to create a new Muallim profile and user account automatically.
+      Submit the required details for Muallim registration.
     </p>
   </div>
 
@@ -11,14 +11,303 @@
     <p>Registration is currently disabled from admin settings.</p>
   </ng-template>
 
-  <form *ngIf="site.settings.registerEnabled" [formGroup]="form" (ngSubmit)="submit()" class="data-form">
-    <label><span>Name *</span><input formControlName="name" /></label>
-    <label><span>Username *</span><input formControlName="username" /></label>
-    <label><span>Email *</span><input formControlName="email" /></label>
-    <label><span>Phone *</span><input formControlName="phone" /></label>
-    <label class="full"><span>Address *</span><textarea rows="3" formControlName="address"></textarea></label>
-    <label class="full"><span>Bio</span><textarea rows="4" formControlName="bio"></textarea></label>
-    <button type="submit">Submit Registration</button>
+  <form *ngIf="site.settings.registerEnabled" [formGroup]="form" class="data-form">
+    <nav class="tab-list" aria-label="Registration sections">
+      <button
+        type="button"
+        *ngFor="let section of sections; let index = index"
+        [class.active]="activeSectionIndex === index"
+        (click)="showSection(index)"
+      >
+        <span>{{ index + 1 }}</span>
+        {{ section }}
+      </button>
+    </nav>
+
+    <section class="form-section" *ngIf="activeSectionIndex === 0">
+      <h2>Login Details</h2>
+      <div class="form-grid">
+        <label>
+          <span>User Name *</span>
+          <input formControlName="username" />
+        </label>
+        <label>
+          <span>Email *</span>
+          <input type="email" formControlName="email" />
+        </label>
+        <label>
+          <span>Mobile *</span>
+          <input inputmode="tel" formControlName="phone" />
+        </label>
+        <label>
+          <span>Password *</span>
+          <input type="password" formControlName="password" />
+        </label>
+        <label>
+          <span>Confirm Password *</span>
+          <input type="password" formControlName="confirmPassword" />
+        </label>
+      </div>
+      <div class="section-actions">
+        <button type="button" (click)="proceed()">Proceed</button>
+      </div>
+    </section>
+
+    <section class="form-section" *ngIf="activeSectionIndex === 1">
+      <h2>Identification & Core Info</h2>
+      <div class="form-grid">
+        <label class="file-field">
+          <span>Photo Upload</span>
+          <input type="file" accept="image/*" (change)="updateFileNames('photoFileName', $event)" />
+          <small *ngIf="form.controls.photoFileName.value">{{ form.controls.photoFileName.value }}</small>
+        </label>
+        <label>
+          <span>Full Name *</span>
+          <input formControlName="name" />
+        </label>
+        <label>
+          <span>Father's Name</span>
+          <input formControlName="fatherName" />
+        </label>
+        <label>
+          <span>Date of Birth</span>
+          <input type="date" formControlName="dateOfBirth" />
+        </label>
+        <label>
+          <span>Aadhaar Number</span>
+          <input inputmode="numeric" maxlength="12" formControlName="aadhaarNumber" />
+          <small>Encrypted before database storage.</small>
+        </label>
+        <label>
+          <span>Marital Status</span>
+          <select formControlName="maritalStatus">
+            <option value="">Select</option>
+          <option *ngFor="let status of maritalStatuses" [value]="status">{{ status }}</option>
+        </select>
+      </label>
+      </div>
+      <div class="section-actions">
+        <button type="button" (click)="proceed()">Proceed</button>
+      </div>
+    </section>
+
+    <section class="form-section" *ngIf="activeSectionIndex === 2">
+      <h2>Education & Training</h2>
+      <div class="form-grid">
+        <label>
+          <span>School Education</span>
+          <input placeholder="SSLC, HSE, Degree" formControlName="schoolEducation" />
+        </label>
+        <label>
+          <span>Islamic Education</span>
+          <input placeholder="Afzal-ul-Ulama, Baqavi" formControlName="islamicEducation" />
+        </label>
+        <label>
+          <span>Aadhaar Qualification *</span>
+          <select formControlName="aadhaarQualification">
+            <option value="">Select training course</option>
+            <option *ngFor="let qualification of qualifications" [value]="qualification">
+              {{ qualification }}
+            </option>
+          </select>
+        </label>
+      </div>
+      <div class="section-actions">
+        <button type="button" (click)="proceed()">Proceed</button>
+      </div>
+    </section>
+
+    <section class="form-section" *ngIf="activeSectionIndex === 3">
+      <h2>Professional Details</h2>
+      <div class="form-grid">
+        <label>
+          <span>Present Institute Name</span>
+          <input formControlName="presentInstituteName" />
+        </label>
+        <fieldset class="radio-group">
+          <legend>Currently Working Here?</legend>
+          <label><input type="radio" [value]="true" formControlName="currentlyWorkingHere" /> Yes</label>
+          <label><input type="radio" [value]="false" formControlName="currentlyWorkingHere" /> No</label>
+        </fieldset>
+        <label class="full">
+          <span>Work Address</span>
+          <textarea rows="3" formControlName="workAddress"></textarea>
+        </label>
+        <label>
+          <span>District</span>
+          <select formControlName="district">
+            <option value="">Select district</option>
+            <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+          </select>
+        </label>
+        <label>
+          <span>Meghala</span>
+          <input formControlName="meghala" />
+        </label>
+        <label>
+          <span>Position/Designation</span>
+          <input formControlName="positionDesignation" />
+        </label>
+        <label>
+          <span>Monthly Salary</span>
+          <input type="number" min="0" formControlName="monthlySalary" />
+        </label>
+        <label>
+          <span>Work Starting Date</span>
+          <input type="date" formControlName="workStartingDate" />
+        </label>
+        <label>
+          <span>Health</span>
+          <select formControlName="health">
+            <option value="">Select health status</option>
+            <option *ngFor="let health of healthOptions" [value]="health">{{ health }}</option>
+          </select>
+        </label>
+        <label>
+          <span>Ration Card</span>
+          <select formControlName="rationCardColor">
+            <option value="">Select color</option>
+            <option *ngFor="let card of rationCards" [value]="card">{{ card }}</option>
+          </select>
+        </label>
+      </div>
+      <div class="section-actions">
+        <button type="button" (click)="proceed()">Proceed</button>
+      </div>
+    </section>
+
+    <section class="form-section" *ngIf="activeSectionIndex === 4">
+      <div class="section-title-row">
+        <h2>Family Membership Details</h2>
+        <button type="button" class="secondary" (click)="addFamilyMember()">Add Member</button>
+      </div>
+
+      <div class="family-table" formArrayName="familyMembers">
+        <div class="table-head">
+          <span>Name</span>
+          <span>Age</span>
+          <span>Relationship</span>
+          <span></span>
+        </div>
+        <div class="table-row" *ngFor="let member of familyMembers.controls; let index = index" [formGroupName]="index">
+          <input formControlName="name" />
+          <input type="number" min="0" formControlName="age" />
+          <input formControlName="relationship" />
+          <button type="button" class="remove-button" (click)="removeFamilyMember(index)">Remove</button>
+        </div>
+      </div>
+
+      <div class="form-grid housing-grid">
+        <label>
+          <span>Home Status</span>
+          <select formControlName="homeStatus">
+            <option value="">Select status</option>
+            <option *ngFor="let status of homeStatuses" [value]="status">{{ status }}</option>
+          </select>
+        </label>
+        <label>
+          <span>House Square Feet</span>
+          <input type="number" min="0" formControlName="houseSquareFeet" />
+        </label>
+      </div>
+      <div class="section-actions">
+        <button type="button" (click)="proceed()">Proceed</button>
+      </div>
+    </section>
+
+    <section class="form-section" *ngIf="activeSectionIndex === 5">
+      <h2>Bank Account Details</h2>
+      <div class="form-grid">
+        <label>
+          <span>Bank Name</span>
+          <select formControlName="bankName">
+            <option value="">Select bank</option>
+            <option *ngFor="let bank of banks" [value]="bank">{{ bank }}</option>
+          </select>
+        </label>
+        <label>
+          <span>Beneficiary Name</span>
+          <input formControlName="beneficiaryName" />
+        </label>
+        <label>
+          <span>Account Number</span>
+          <input formControlName="accountNumber" />
+        </label>
+        <label>
+          <span>IFSC Code</span>
+          <input formControlName="ifscCode" />
+        </label>
+        <label>
+          <span>Branch</span>
+          <input formControlName="branch" />
+        </label>
+      </div>
+      <div class="section-actions">
+        <button type="button" (click)="proceed()">Proceed</button>
+      </div>
+    </section>
+
+    <section class="form-section" *ngIf="activeSectionIndex === 6">
+      <h2>Previous Financial Assistance</h2>
+      <div class="assistance-table" formArrayName="previousFinancialAssistance">
+        <div class="table-head">
+          <span>Organization</span>
+          <span>Year</span>
+          <span>Amount</span>
+          <span>Item/Sector</span>
+        </div>
+        <div class="table-row" *ngFor="let item of previousFinancialAssistance.controls; let index = index" [formGroupName]="index">
+          <input formControlName="organization" readonly />
+          <input type="number" min="1900" formControlName="year" />
+          <input type="number" min="0" formControlName="amount" />
+          <input formControlName="itemSector" />
+        </div>
+      </div>
+      <div class="section-actions">
+        <button type="button" (click)="proceed()">Proceed</button>
+      </div>
+    </section>
+
+    <section class="form-section" *ngIf="activeSectionIndex === 7">
+      <h2>Verification & Attachments</h2>
+      <div class="form-grid">
+        <label>
+          <span>Medical Status</span>
+          <input formControlName="medicalStatus" />
+        </label>
+        <fieldset class="checklist full">
+          <legend>Attached Certificates</legend>
+          <label *ngFor="let certificate of certificateOptions">
+            <input
+              type="checkbox"
+              [checked]="hasCertificate(certificate)"
+              (change)="updateCertificates(certificate, $event)"
+            />
+            {{ certificate }}
+          </label>
+        </fieldset>
+        <label class="file-field full">
+          <span>Upload Documents</span>
+          <input type="file" multiple (change)="updateFileNames('uploadedDocuments', $event)" />
+          <small *ngIf="form.controls.uploadedDocuments.value?.length">
+            {{ form.controls.uploadedDocuments.value?.join(', ') }}
+          </small>
+        </label>
+      </div>
+      <div class="section-actions">
+        <button type="button" (click)="proceed()">Review</button>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <p *ngIf="submitMessage || draftMessage">{{ submitMessage || draftMessage }}</p>
+      <div>
+        <button type="button" class="secondary" (click)="saveDraft()">Save Draft</button>
+        <button type="button" [disabled]="saving" (click)="submit()">
+          {{ saving ? 'Submitting...' : 'Submit Registration' }}
+        </button>
+      </div>
+    </div>
   </form>
 
   <div class="success-card" *ngIf="submittedId">

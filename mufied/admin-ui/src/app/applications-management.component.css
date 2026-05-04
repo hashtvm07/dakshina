@@ -164,6 +164,124 @@
   opacity: 0.7;
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(15, 23, 42, 0.42);
+}
+
+.admit-modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 41;
+  width: min(92vw, 520px);
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+  color: #000;
+}
+
+.modal-head,
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-actions {
+  justify-content: flex-end;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 0;
+}
+
+.modal-kicker {
+  margin: 0 0 0.2rem;
+  color: #4b5563;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.modal-head h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.modal-close {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.modal-body {
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.class-options {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.class-options legend {
+  padding: 0 0.35rem;
+  font-weight: 800;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.9rem;
+}
+
+.radio-option input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.college-box {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #f9fafb;
+}
+
+.college-box span {
+  color: #4b5563;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.btn-cancel {
+  padding: 0.55rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+  font-weight: 800;
+}
+
 @media (max-width: 768px) {
   .applications-table {
     font-size: 0.75rem;

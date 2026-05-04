@@ -1,0 +1,44 @@
+<section class="page-shell">
+  <div class="page-header">
+    <span>Admissions</span>
+    <h1>Admissions List</h1>
+  </div>
+
+  <section class="panel">
+    <form [formGroup]="searchForm" class="search-row">
+      <label>
+        <span>Admission Search</span>
+        <input placeholder="Search by admission number, application ID, or name" formControlName="query" />
+      </label>
+      <button type="button">Search</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="admissions-table">
+      <div class="table-head">
+        <span>Admission No.</span>
+        <span>Name</span>
+        <span>Course</span>
+        <span>Year</span>
+        <span>Application ID</span>
+        <span>Contact</span>
+        <span>Admitted</span>
+      </div>
+
+      <ng-container *ngIf="admissions$ | async as admissions">
+        <div class="table-row" *ngFor="let admission of admissions">
+          <strong>{{ admission.admissionNumber }}</strong>
+          <span>{{ admission.name }}</span>
+          <span>{{ admission.admissionCourseCode }} - {{ courseLabels[admission.admissionCourseCode] }}</span>
+          <span>{{ admission.admissionYear }}</span>
+          <span>{{ admission.publicId }}</span>
+          <span>{{ admission.phone }}<small>{{ admission.email }}</small></span>
+          <span>{{ admission.admittedAt | date: 'mediumDate' }}</span>
+        </div>
+
+        <p class="empty-state" *ngIf="!admissions.length">No admissions found.</p>
+      </ng-container>
+    </div>
+  </section>
+</section>

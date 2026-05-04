@@ -6,6 +6,51 @@
   color: #000;
 }
 
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.toolbar-kicker {
+  margin: 0 0 0.25rem;
+  color: #2563eb;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.list-toolbar h2,
+.confirm-content h2 {
+  margin: 0;
+  color: #111827;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+}
+
+.reset-button {
+  padding: 0.7rem 0.95rem;
+  border: 1px solid #1d4ed8;
+  border-radius: 7px;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.reset-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .message-box {
   padding: 0.875rem 1rem;
   background-color: #fff;
@@ -94,6 +139,12 @@
   color: #000;
 }
 
+.admitted-time {
+  white-space: nowrap;
+  color: #374151;
+  font-size: 0.8rem;
+}
+
 .program {
   font-size: 0.8rem;
   background-color: #fff;
@@ -121,7 +172,153 @@
   text-overflow: ellipsis;
 }
 
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border: 1px solid #2563eb;
+  border-radius: 7px;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+}
+
+.icon-button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
+.icon-button:disabled,
+.delete-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.delete-button {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #b91c1c;
+  border-radius: 7px;
+  background: #dc2626;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(4px);
+}
+
+.confirm-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 51;
+  width: min(92vw, 430px);
+  transform: translate(-50%, -50%);
+  display: grid;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  background: #fff;
+  color: #111827;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.3);
+}
+
+.confirm-icon {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.confirm-icon.warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.confirm-content {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.confirm-content p:last-child {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.confirm-cancel,
+.confirm-accept {
+  min-width: 7rem;
+  padding: 0.72rem 0.9rem;
+  border-radius: 7px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.confirm-cancel {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #374151;
+}
+
+.confirm-accept {
+  border: 1px solid #b91c1c;
+  background: #dc2626;
+  color: #fff;
+}
+
+.confirm-accept.warning {
+  border-color: #b45309;
+  background: #d97706;
+}
+
 @media (max-width: 768px) {
+  .list-toolbar,
+  .confirm-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .reset-button,
+  .confirm-cancel,
+  .confirm-accept {
+    width: 100%;
+  }
+
   .admissions-table {
     font-size: 0.75rem;
   }

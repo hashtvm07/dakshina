@@ -1,11 +1,15 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HomeContentAdminService, ManagedAdmission } from './home-content-admin.service';
 
+const ADMISSION_CLASS_OPTIONS = ['Foundation course Class 4-7 (HIFZ)', 'Secondary (8-10)', 'Higher Secondary'];
+const ADMISSION_COLLEGE = 'Mannaniyya Umarul Farooq Academy Kilikolloor, Kollam';
+
 @Component({
   selector: 'app-applications-management',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './applications-management.component.html',
   styleUrl: './applications-management.component.css',
 })
@@ -13,7 +17,11 @@ export class ApplicationsManagementComponent {
   protected readonly applications = signal<ManagedAdmission[]>([]);
   protected readonly loading = signal(true);
   protected readonly admittingApplicationNo = signal('');
+  protected readonly admissionDraft = signal<ManagedAdmission | null>(null);
+  protected selectedClass = ADMISSION_CLASS_OPTIONS[1];
   protected readonly message = signal('');
+  protected readonly classOptions = ADMISSION_CLASS_OPTIONS;
+  protected readonly college = ADMISSION_COLLEGE;
 
   constructor(private readonly adminService: HomeContentAdminService) {
     void this.loadApplications();
@@ -36,7 +44,30 @@ export class ApplicationsManagementComponent {
     }
   }
 
-  protected async admitStudent(application: ManagedAdmission) {
+  protected openAdmitDialog(application: ManagedAdmission) {
+    if (this.admittingApplicationNo()) {
+      return;
+    }
+
+    this.selectedClass = this.classOptions.includes(application.admissionFor)
+      ? application.admissionFor
+      : this.classOptions[1];
+    this.admissionDraft.set(application);
+  }
+
+  protected closeAdmitDialog() {
+    if (!this.admittingApplicationNo()) {
+      this.admissionDraft.set(null);
+    }
+  }
+
+  protected async confirmAdmission() {
+    const application = this.admissionDraft();
+
+    if (!application) {
+      return;
+    }
+
     const applicationNo = application.applicationNo;
 
     if (this.admittingApplicationNo()) {
@@ -46,9 +77,13 @@ export class ApplicationsManagementComponent {
     this.admittingApplicationNo.set(applicationNo);
     this.message.set(`Admitting ${applicationNo}...`);
     try {
-      const response = await this.adminService.admitStudent(undefined, application);
+      const response = await this.adminService.admitStudent(undefined, application, {
+        admittedClass: this.selectedClass,
+        college: this.college,
+      });
       await this.loadApplications();
       this.message.set(response.message);
+      this.admissionDraft.set(null);
     } catch (error) {
       this.message.set(this.formatError(error, 'Unable to admit student.'));
     } finally {

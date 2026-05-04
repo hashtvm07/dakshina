@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { College } from '../colleges/entities/college.entity';
 import { Muallim } from '../muallims/entities/muallim.entity';
 import { ContentBlock } from '../site/entities/content-block.entity';
@@ -11,7 +12,9 @@ import { Vacancy } from '../vacancies/entities/vacancy.entity';
 const DEFAULT_DEV_DB_HOST = '127.0.0.1';
 const DEFAULT_DB_PORT = 5432;
 const DEFAULT_DB_USER = 'postgres';
+const DEFAULT_DB_PASSWORD = 'postgres';
 const DEFAULT_DB_NAME = 'muallim_portal';
+type AppPostgresOptions = TypeOrmModuleOptions & PostgresConnectionOptions;
 
 function getNumberConfig(
   configService: ConfigService,
@@ -55,8 +58,13 @@ export function createDatabaseConfig(
   const dbHost = configService.get<string>('DB_HOST')?.trim();
   const dbPort = getNumberConfig(configService, 'DB_PORT', DEFAULT_DB_PORT);
   const sslEnabled = getBooleanConfig(configService, 'DB_SSL', false);
+  const connectTimeoutMillis = getNumberConfig(
+    configService,
+    'DB_CONNECT_TIMEOUT_MS',
+    isManagedRuntime ? 10000 : 30000,
+  );
 
-  const baseConfig: TypeOrmModuleOptions = {
+  const baseConfig: AppPostgresOptions = {
     type: 'postgres',
     autoLoadEntities: true,
     entities: [User, Muallim, SiteSettings, ContentBlock, MediaAsset, College, Vacancy],
@@ -64,13 +72,17 @@ export function createDatabaseConfig(
     ssl: sslEnabled ? { rejectUnauthorized: false } : false,
     retryAttempts: isManagedRuntime ? 3 : 10,
     retryDelay: isManagedRuntime ? 1000 : 3000,
+    extra: {
+      application_name: 'muallim-api',
+      connectionTimeoutMillis: connectTimeoutMillis,
+    },
   };
 
   if (databaseUrl) {
     return {
       ...baseConfig,
       url: databaseUrl,
-    };
+    } as TypeOrmModuleOptions;
   }
 
   const resolvedHost = dbSocketPath || dbHost;
@@ -86,7 +98,7 @@ export function createDatabaseConfig(
     host: resolvedHost || DEFAULT_DEV_DB_HOST,
     port: dbPort,
     username: configService.get<string>('DB_USERNAME', DEFAULT_DB_USER),
-    password: configService.get<string>('DB_PASSWORD', DEFAULT_DB_USER),
+    password: configService.get<string>('DB_PASSWORD', DEFAULT_DB_PASSWORD),
     database: configService.get<string>('DB_NAME', DEFAULT_DB_NAME),
-  };
+  } as TypeOrmModuleOptions;
 }

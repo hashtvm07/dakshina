@@ -1,4 +1,4 @@
-<section class="profile-card" *ngIf="muallim$ | async as muallim">
+<section class="profile-card" *ngIf="muallim as muallim">
   <span>Muallim Profile</span>
   <h1>{{ muallim.name }}</h1>
   <div class="profile-grid">
@@ -9,4 +9,79 @@
     <article class="wide"><strong>Address</strong><p>{{ muallim.address }}</p></article>
     <article class="wide" *ngIf="muallim.bio"><strong>Bio</strong><p>{{ muallim.bio }}</p></article>
   </div>
+
+  <form class="profile-form" *ngIf="canEdit" [formGroup]="form" (ngSubmit)="saveProfile()">
+    <h2>Edit Profile</h2>
+    <label>
+      <span>Full Name</span>
+      <input formControlName="name" />
+    </label>
+    <label>
+      <span>Email</span>
+      <input type="email" formControlName="email" />
+    </label>
+    <label>
+      <span>Mobile</span>
+      <input formControlName="phone" />
+    </label>
+    <label class="wide">
+      <span>Address</span>
+      <textarea rows="3" formControlName="address"></textarea>
+    </label>
+    <label class="wide">
+      <span>Bio</span>
+      <textarea rows="3" formControlName="bio"></textarea>
+    </label>
+    <label>
+      <span>Father's Name</span>
+      <input formControlName="fatherName" />
+    </label>
+    <label>
+      <span>Date of Birth</span>
+      <input type="date" formControlName="dateOfBirth" />
+    </label>
+    <label>
+      <span>Marital Status</span>
+      <input formControlName="maritalStatus" />
+    </label>
+    <label>
+      <span>School Education</span>
+      <input formControlName="schoolEducation" />
+    </label>
+    <label>
+      <span>Islamic Education</span>
+      <input formControlName="islamicEducation" />
+    </label>
+    <label>
+      <span>Present Institute Name</span>
+      <input formControlName="presentInstituteName" />
+    </label>
+    <label class="wide">
+      <span>Work Address</span>
+      <textarea rows="3" formControlName="workAddress"></textarea>
+    </label>
+    <label>
+      <span>District</span>
+      <input formControlName="district" />
+    </label>
+    <label>
+      <span>Meghala</span>
+      <input formControlName="meghala" />
+    </label>
+    <label>
+      <span>Position/Designation</span>
+      <input formControlName="positionDesignation" />
+    </label>
+    <label>
+      <span>Monthly Salary</span>
+      <input type="number" min="0" formControlName="monthlySalary" />
+    </label>
+    <label>
+      <span>Health</span>
+      <input formControlName="health" />
+    </label>
+
+    <p *ngIf="message">{{ message }}</p>
+    <button type="submit" [disabled]="saving">{{ saving ? 'Saving...' : 'Update Profile' }}</button>
+  </form>
 </section>

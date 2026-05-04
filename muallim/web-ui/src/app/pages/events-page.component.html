@@ -1,0 +1,15 @@
+<section class="page-card">
+  <div class="page-intro">
+    <span>Events</span>
+    <h1>Latest college activities and important dates</h1>
+    <p>Upcoming admission, registration, and vacancy-related updates are listed here.</p>
+  </div>
+
+  <div class="event-grid">
+    <article *ngFor="let vacancy of (vacancies$ | async)?.slice(0, 6)">
+      <span>{{ vacancy.lastDate | date }}</span>
+      <h2>{{ vacancy.title }}</h2>
+      <p>{{ vacancy.college?.name }} - {{ vacancy.location }}</p>
+    </article>
+  </div>
+</section>

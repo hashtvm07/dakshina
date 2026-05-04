@@ -1,0 +1,44 @@
+.page-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 20px 48px rgba(20, 73, 45, 0.14);
+}
+
+.page-intro span {
+  color: #0f6d3d;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.page-intro h1 {
+  margin: 0.45rem 0 0.8rem;
+}
+
+.search-panel {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  margin-top: 1.5rem;
+}
+
+.search-panel input,
+.search-panel button {
+  border-radius: 16px;
+  border: 1px solid rgba(18, 91, 55, 0.16);
+  padding: 0.95rem 1rem;
+}
+
+.search-panel button {
+  background: linear-gradient(135deg, #0f6d3d, #57b27b);
+  color: #fff;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .search-panel {
+    grid-template-columns: 1fr;
+  }
+}

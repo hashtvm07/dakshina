@@ -1,4 +1,19 @@
 <div class="admissions-container">
+  <div class="list-toolbar">
+    <div>
+      <p class="toolbar-kicker">Admission List</p>
+      <h2>Admitted Students</h2>
+    </div>
+    <button
+      type="button"
+      class="reset-button"
+      (click)="resetAdmissionNumbers()"
+      [disabled]="resettingAdmissionNumbers() || !!deletingAdmissionNo() || !!downloadingAdmissionNo() || loading() || admissions().length > 0"
+    >
+      {{ resettingAdmissionNumbers() ? 'Resetting...' : 'Reset Admission Numbers' }}
+    </button>
+  </div>
+
   @if (message()) {
     <div class="message-box">
       {{ message() }}
@@ -15,6 +30,7 @@
         <thead>
           <tr>
             <th>Admission Number</th>
+            <th>Admitted Time</th>
             <th>Student Name</th>
             <th>Program</th>
             <th>Application No</th>
@@ -23,6 +39,7 @@
             <th>Email</th>
             <th>Mobile</th>
             <th>State</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -31,6 +48,7 @@
               <td class="admission-number-cell">
                 <span class="admission-number">{{ admission.admissionNumber }}</span>
               </td>
+              <td class="admitted-time">{{ formatDateTime(admission.admittedAt || admission.createdAt) }}</td>
               <td class="student-name">{{ admission.studentName }}</td>
               <td class="program">{{ admission.admissionFor }}</td>
               <td class="mono">{{ admission.applicationNo }}</td>
@@ -39,10 +57,52 @@
               <td class="email-cell">{{ admission.email }}</td>
               <td>{{ admission.mobileNumber }}</td>
               <td>{{ admission.state }}</td>
+              <td>
+                <div class="action-buttons">
+                  <button
+                    type="button"
+                    class="icon-button"
+                    (click)="downloadAdmitCard(admission)"
+                    [disabled]="downloadingAdmissionNo() === admission.applicationNo || !!deletingAdmissionNo()"
+                    title="Download admit card"
+                    aria-label="Download admit card"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 3v11m0 0 4-4m-4 4-4-4M5 20h14" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    class="delete-button"
+                    (click)="deleteAdmission(admission)"
+                    [disabled]="deletingAdmissionNo() === admission.applicationNo || !!downloadingAdmissionNo()"
+                  >
+                    {{ deletingAdmissionNo() === admission.applicationNo ? 'Deleting...' : 'Delete' }}
+                  </button>
+                </div>
+              </td>
             </tr>
           }
         </tbody>
       </table>
     </div>
+  }
+
+  @if (confirmDialog(); as dialog) {
+    <div class="confirm-backdrop" (click)="closeConfirmDialog(false)"></div>
+    <section class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+      <div class="confirm-icon" [class.warning]="dialog.tone === 'warning'">!</div>
+      <div class="confirm-content">
+        <p class="toolbar-kicker">Confirmation</p>
+        <h2 id="confirm-title">{{ dialog.title }}</h2>
+        <p>{{ dialog.message }}</p>
+      </div>
+      <div class="confirm-actions">
+        <button type="button" class="confirm-cancel" (click)="closeConfirmDialog(false)">Cancel</button>
+        <button type="button" class="confirm-accept" [class.warning]="dialog.tone === 'warning'" (click)="closeConfirmDialog(true)">
+          {{ dialog.confirmLabel }}
+        </button>
+      </div>
+    </section>
   }
 </div>

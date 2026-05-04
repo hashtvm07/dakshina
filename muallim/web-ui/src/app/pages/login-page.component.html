@@ -1,0 +1,22 @@
+<section class="login-card">
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <span>Login</span>
+    <h1>Muallim Portal</h1>
+
+    <label>
+      <span>User Name</span>
+      <input formControlName="username" autocomplete="username" />
+    </label>
+
+    <label>
+      <span>Password</span>
+      <input type="password" formControlName="password" autocomplete="current-password" />
+    </label>
+
+    <p *ngIf="message">{{ message }}</p>
+
+    <button type="submit" [disabled]="submitting">
+      {{ submitting ? 'Signing in...' : 'Login' }}
+    </button>
+  </form>
+</section>
